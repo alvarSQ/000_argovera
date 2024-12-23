@@ -1,0 +1,157 @@
+<script setup lang="ts">
+import { useWindowScroll } from '@vueuse/core';
+
+const { y: scrollY } = useWindowScroll();
+
+const isHeader = computed(() => (scrollY.value < 30 ? false : true));
+
+</script>
+
+<template>
+  <header>
+    <div class="navbar" :class="{ fix: isHeader }">
+      <div class="container">
+        <div class="navbar-content menu-top" v-show="!isHeader">
+          <span>Пермь, ул. Луначарского, 90</span>
+          <div>Вход | Регистрация</div>
+        </div>
+        <div class="navbar-content">
+          <div class="icon-block">
+            <NuxtLink to="/"><div class="logo">АРГО</div></NuxtLink>            
+            <NuxtLink to="/category/beauty">
+            <div class="btn catalog-btn">
+              <div class="line-three">
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+              Каталог
+            </div>
+            </NuxtLink>
+          </div>
+          <UISearchForm />
+          <div class="icon-block">
+            <div class="icon-one">
+              <div class="icon-num">8</div>
+              <svg
+                viewBox="0 0 22 20"
+                width="26px"
+                height="26px"
+                fill="currentColor"
+              >
+                <path
+                  d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"
+                ></path>
+              </svg>
+              <span>Избранное</span>
+            </div>
+            <div class="icon-one">
+              <div class="icon-num">12</div>
+              <svg
+                width="26px"
+                height="26px"
+                viewBox="0 0 22 20"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M2.23737 2.28845C1.84442 2.15746 1.41968 2.36983 1.28869 2.76279C1.15771 3.15575 1.37008 3.58049 1.76303 3.71147L2.02794 3.79978C2.70435 4.02524 3.15155 4.17551 3.481 4.32877C3.79296 4.47389 3.92784 4.59069 4.01426 4.71059C4.10068 4.83049 4.16883 4.99538 4.20785 5.33722C4.24907 5.69823 4.2502 6.17 4.2502 6.883L4.2502 9.55484C4.25018 10.9224 4.25017 12.0247 4.36673 12.8917C4.48774 13.7918 4.74664 14.5497 5.34855 15.1516C5.95047 15.7535 6.70834 16.0124 7.60845 16.1334C8.47542 16.25 9.57773 16.25 10.9453 16.25H18.0002C18.4144 16.25 18.7502 15.9142 18.7502 15.5C18.7502 15.0857 18.4144 14.75 18.0002 14.75H11.0002C9.56479 14.75 8.56367 14.7484 7.80832 14.6468C7.07455 14.5482 6.68598 14.3677 6.40921 14.091C6.17403 13.8558 6.00839 13.5398 5.9034 13H16.0222C16.9817 13 17.4614 13 17.8371 12.7522C18.2128 12.5045 18.4017 12.0636 18.7797 11.1817L19.2082 10.1817C20.0177 8.2929 20.4225 7.34849 19.9779 6.67422C19.5333 5.99996 18.5058 5.99996 16.4508 5.99996H5.74526C5.73936 5.69227 5.72644 5.41467 5.69817 5.16708C5.64282 4.68226 5.52222 4.2374 5.23112 3.83352C4.94002 3.42965 4.55613 3.17456 4.1137 2.96873C3.69746 2.7751 3.16814 2.59868 2.54176 2.38991L2.23737 2.28845Z"
+                />
+                <path
+                  d="M7.5 18C8.32843 18 9 18.6716 9 19.5C9 20.3284 8.32843 21 7.5 21C6.67157 21 6 20.3284 6 19.5C6 18.6716 6.67157 18 7.5 18Z"
+                />
+                <path
+                  d="M16.5 18.0001C17.3284 18.0001 18 18.6716 18 19.5001C18 20.3285 17.3284 21.0001 16.5 21.0001C15.6716 21.0001 15 20.3285 15 19.5001C15 18.6716 15.6716 18.0001 16.5 18.0001Z"
+                />
+              </svg>
+              <span>Корзина</span>
+            </div>
+          </div>
+        </div>
+        <ul class="navbar-content menu-bottom" v-show="!isHeader">
+          <li>подобрать препарат</li>
+          <li>НОВОСТИ</li>
+          <li>СТАТЬИ</li>
+          <li>ПРАЙС-ЛИСТ</li>
+          <li>ОПЛАТА И ДОСТАВКА</li>
+          <li>СКИДКИ</li>
+          <li>КОНТАКТЫ</li>
+          <li>О КОМПАНИИ АРГО</li>
+        </ul>
+      </div>
+    </div>
+  </header>
+</template>
+
+<style lang="scss" scoped>
+@use '@/assets/scss/utils/vars.scss' as *;
+
+.fix {
+  position: fixed;
+}
+
+.menu-top {
+  font-size: 12px;
+  margin-bottom: 15px;
+  color: gray;
+}
+
+.menu-bottom {
+  font-size: 12px;
+  text-transform: uppercase;
+  margin-top: 20px;
+  white-space: nowrap;
+}
+
+.line-three {
+  display: flex;
+  flex-direction: column;
+  width: 23px;
+  gap: 3px;
+  div {
+    width: 100%;
+    height: 3px;
+    border-radius: 5px;
+    background-color: #fff;
+  }
+}
+
+.catalog-btn {
+  display: flex;
+  gap: 10px;
+  padding: 0 15px;
+}
+
+.icon-block {
+  display: flex;
+  gap: 20px;
+}
+
+.icon-one {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  color: $primary-color;
+  position: relative;
+  cursor: pointer;
+}
+
+.icon-num {
+  position: absolute;
+  right: 0;
+  top: -10px;
+  border-radius: 8px;
+  padding: 0px 8px;
+  color: #fff;
+  background-color: #f91155;
+}
+
+.logo {
+  font-family: 'Muller Extra';
+  color: $primary-color;
+  font-size: 32px;
+  padding-top: 8px;
+  cursor: pointer;
+}
+</style>

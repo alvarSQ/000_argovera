@@ -1,0 +1,138 @@
+@use 'common/navbar.scss' as *;
+@use 'utils/reset.scss' as *;
+@use 'utils/vars.scss' as *;
+
+@import url("https://fonts.googleapis.com/css?family=Inter");
+
+@font-face {
+    font-family: 'Muller Extra';
+    src: url('@/assets/fonts/MullerExtraBold.eot');
+    src: url('@/assets/fonts/MullerExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('@/assets/fonts/MullerExtraBold.woff2') format('woff2'),
+        url('@/assets/fonts/MullerExtraBold.woff') format('woff'),
+        url('@/assets/fonts/MullerExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'GTEestiPro';
+    src: url('@/assets/fonts/GTEestiProDisplay-Regular.eot');
+    src: url('@/assets/fonts/GTEestiProDisplay-Regular.eot?#iefix') format('embedded-opentype'),
+        url('@/assets/fonts/GTEestiProDisplay-Regular.woff2') format('woff2'),
+        url('@/assets/fonts/GTEestiProDisplay-Regular.woff') format('woff'),
+        url('@/assets/fonts/GTEestiProDisplay-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+html {
+  height: 100%;
+}
+
+
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+footer, // also footer if footer without section
+section,
+.section {
+  position: relative;
+  padding: 40px 0;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.container {
+  margin: 0 auto;
+  width: wmax(1416);
+  font-family: $mainFont;
+  font-weight: 400;
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    height: 40px;
+    font-size: 16px;
+    border-radius: 10px;
+    color: white;
+    background: $primary-color;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-line {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.content {
+  margin-top: 150px;
+}
+
+.title {
+  color: $primary-color;
+  font-size: wmax(20);
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+
+.products-list {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}

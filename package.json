@@ -1,0 +1,25 @@
+{
+  "name": "argovera",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "nuxt": "^3.14.159",
+    "pinia": "^2.2.6",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@nuxt/image": "^1.8.1",
+    "@pinia/nuxt": "^0.7.0",
+    "@vueuse/nuxt": "^12.0.0",
+    "nuxt-typed-router": "^3.7.0",
+    "sass": "^1.81.0"
+  }
+}
