@@ -1,13 +1,15 @@
 import { defineStore } from 'pinia';
 
-const URL = 'https://argovera.onrender.com/categories/';
+// const URL = 'https://argovera.onrender.com/categories/';
+
+const URL = 'http://localhost:10000/categories/';
 
 export const useСategoriesStore = defineStore('categories', () => {
   const categories = ref([] as ICategories[]);
 
   const categoriesTree = ref([] as ICategoriesTree[]);
 
-  const productsByCategory = ref([] as IProduct[]);
+  const productsByCategory = ref({} as IProductsByCategory);
 
   // const getCategories = computed(() => categories.value);
   // const getProductsByCategory = computed(() => productsByCategory.value);
@@ -21,7 +23,7 @@ export const useСategoriesStore = defineStore('categories', () => {
     try {
       const data = await $fetch(url);
       if (tree) categoriesTree.value = data as ICategoriesTree[];
-      if (slug) productsByCategory.value = (data as IProductsList).products;      
+      if (slug) productsByCategory.value = (data as IProductsByCategory);       
     } catch (e) {
       console.log((e as Error).message);
     } finally {

@@ -12,5 +12,20 @@ export const useAllStore = defineStore('all', () => {
 
   const productsTotal = ref(0)
 
-  return { breadCrumbs, isLoading, searchQuery, limitScroll, productsTotal };
+  const activeCategoryChain = ref([] as number[]); 
+
+
+  // const setOpenCategoryId = (id: number | null) => {
+  //     openCategoryId.value = id;
+  //   }
+
+  return {
+    breadCrumbs,
+    isLoading,
+    searchQuery,
+    limitScroll,
+    productsTotal,
+    activeCategoryChain,
+    // setOpenCategoryId
+  };
 });

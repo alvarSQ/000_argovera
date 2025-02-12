@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core';
 const { productBySlug } = storeToRefs(useProductsStore());
+const { isLoading } = storeToRefs(useAllStore());
 
 const descriptTitles = ref([
   {
@@ -26,16 +27,20 @@ const descriptTitleActiv = (title: string) => {
   });
 };
 
-const descriptActiv = computed(() =>
-  descriptActivTitle.value === 'Описание'
-    ? productBySlug.value.description
-    : productBySlug.value.reviews
-);
+const descriptActiv = computed(() => descriptActivTitle.value === descriptTitles.value[0].title);
+
+// const descriptActiv = computed(() =>
+//   descriptActivTitle.value === 'Описание'
+//     ? productBySlug.value.description
+//     : productBySlug.value.reviews
+// );
 
 const dataFromString = (dateStr: string) => {
   const formattedDate = useDateFormat(dateStr, 'DD.MM.YYYY, HH:mm');
   return formattedDate;
 };
+
+// onMounted(() => isLoading.value = true)
 </script>
 
 <template>
@@ -52,8 +57,9 @@ const dataFromString = (dateStr: string) => {
     </ul>
     <div class="descript-contener">
       <p
-        v-if="descriptActivTitle === descriptTitles[0].title"
-        v-html="descriptActiv"
+        v-if="descriptActiv"
+        v-html="productBySlug.description"
+        :key="productBySlug.slug"
       ></p>
       <div class="reviews" v-else>
         <ul class="reviews-left flex-column">

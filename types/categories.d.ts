@@ -6,4 +6,6 @@ declare interface ICategories {
   image: string;
   seoDescription: string;
   seoKeywords: string;
+  children?: ICategories[];
+  products?: IProduct[];
 }

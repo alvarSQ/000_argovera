@@ -14,12 +14,8 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
     </div>
     <div class="div4">
       <span class="title">Категории</span>
-      <ul>
-        <UICategriesTree
-          v-for="category in categoriesTree"
-          :key="category.id"
-          :category="category"
-        />
+      <ul class="flex-column">
+        <UICategriesTree v-for="category in categoriesTree" :key="category.id" :category="category"/>
       </ul>
     </div>
     <div class="div2">
@@ -30,6 +26,12 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 
 <style lang="scss" scoped>
 @use '@/assets/scss/utils/vars.scss' as *;
+
+.flex-column {
+  margin-top: 10px;
+  line-height: 1.2;
+  gap: 10px;
+}
 
 .parent {
   display: grid;

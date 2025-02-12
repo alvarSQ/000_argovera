@@ -34,12 +34,13 @@ await callOnce(() => productsStore.loadProduct())
     </div>
     <span class="main-caption">Популярные товары</span>
     <div class="products-main">
-      <template v-for="product in products" :key="product.id">
-        <NuxtLink :to="{ name: 'products-slug', params: { slug: product.slug } }">
+      <template v-for="(product, index) in products" :key="product.id">
+        <NuxtLink :to="{ name: 'products-slug', params: { slug: product.slug } }" v-if="index > 10 && index < 21">
         <UICardProduct
           :image="product.image"
           :price="product.price"
           :name="product.name"
+          v-if="index > 10 && index < 21"
         /></NuxtLink>
       </template>
     </div>
