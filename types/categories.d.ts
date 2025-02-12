@@ -1,5 +1,9 @@
 declare interface ICategories {
+  id: number;
   slug: string;
   name: string;
-  url: string;
+  description: string;
+  image: string;
+  seoDescription: string;
+  seoKeywords: string;
 }

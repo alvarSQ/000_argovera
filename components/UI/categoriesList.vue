@@ -4,7 +4,7 @@ import { useСategoriesStore } from '@/stores/categories';
 const сategoriesStore = useСategoriesStore();
 const { categories } = storeToRefs(useСategoriesStore());
 
-await callOnce(() => сategoriesStore.loadCategories())
+await callOnce(() => сategoriesStore.loadCategories('', ''))
 </script>
 
 <template>

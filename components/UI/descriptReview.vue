@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core';
-const { productById } = storeToRefs(useProductsStore());
+const { productBySlug } = storeToRefs(useProductsStore());
 
 const descriptTitles = ref([
   {
@@ -28,38 +28,38 @@ const descriptTitleActiv = (title: string) => {
 
 const descriptActiv = computed(() =>
   descriptActivTitle.value === 'Описание'
-    ? productById.value.description
-    : productById.value.reviews
+    ? productBySlug.value.description
+    : productBySlug.value.reviews
 );
 
 const dataFromString = (dateStr: string) => {
   const formattedDate = useDateFormat(dateStr, 'DD.MM.YYYY, HH:mm');
   return formattedDate;
 };
-
 </script>
 
 <template>
-    <div class="descript">
-        <ul class="descript-titles flex-line">
-          <li
-            :class="{ 'descript-activ': descriptTitle.activ }"
-            v-for="descriptTitle in descriptTitles"
-            :key="descriptTitle.title"
-            @click="descriptTitleActiv(descriptTitle.title)"
-          >
-            {{ descriptTitle.title }}
-          </li>
-        </ul>
-        <div class="descript-contener">
-          <p v-if="descriptActivTitle === descriptTitles[0].title">
-            {{ descriptActiv }}
-          </p>
-          <div class="reviews" v-else>
-            <ul class="reviews-left flex-column">
-              <li
+  <div class="descript">
+    <ul class="descript-titles flex-line">
+      <li
+        :class="{ 'descript-activ': descriptTitle.activ }"
+        v-for="descriptTitle in descriptTitles"
+        :key="descriptTitle.title"
+        @click="descriptTitleActiv(descriptTitle.title)"
+      >
+        {{ descriptTitle.title }}
+      </li>
+    </ul>
+    <div class="descript-contener">
+      <p
+        v-if="descriptActivTitle === descriptTitles[0].title"
+        v-html="descriptActiv"
+      ></p>
+      <div class="reviews" v-else>
+        <ul class="reviews-left flex-column">
+          <!-- <li
                 class="flex-column"
-                v-for="(review, index) in productById.reviews"
+                v-for="(review, index) in productBySlug.reviews"
                 :key="index"
               >
                 <div>
@@ -70,14 +70,14 @@ const dataFromString = (dateStr: string) => {
                   }}</span>
                 </div>
                 <span>{{ review.comment }}</span>
-              </li>
-            </ul>
-            <div class="reviews-right flex-column">
-              <UIWriteReview />
-            </div>
-          </div>
+              </li> -->
+        </ul>
+        <div class="reviews-right flex-column">
+          <UIWriteReview />
         </div>
       </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -125,6 +125,8 @@ const dataFromString = (dateStr: string) => {
   padding: 20px;
   background-color: #fff;
   box-shadow: 0px 3px 10px #00000075;
+  p {
+    line-height: 1.4;
+  }
 }
-
 </style>

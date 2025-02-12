@@ -35,11 +35,11 @@ await callOnce(() => productsStore.loadProduct())
     <span class="main-caption">Популярные товары</span>
     <div class="products-main">
       <template v-for="product in products" :key="product.id">
-        <NuxtLink :to="{ name: 'products-id', params: { id: product.id } }">
+        <NuxtLink :to="{ name: 'products-slug', params: { slug: product.slug } }">
         <UICardProduct
-          :image="product.images[0]"
+          :image="product.image"
           :price="product.price"
-          :title="product.title"
+          :name="product.name"
         /></NuxtLink>
       </template>
     </div>

@@ -20,8 +20,17 @@ const titleCategory = computed(() => {
   return str.toUpperCase();
 });
 
+const { findOne} = useStrapi()
+
+const response = await findOne('product', 'argozid-forte')
+
+
+  
+
 
 onMounted(() => {
+  console.log(response);
+  
   сategoriesStore.loadCategories(slug.value);
   getBreadCrumbs()
 })
@@ -32,11 +41,11 @@ onMounted(() => {
   <UIPreloader v-if="isLoading" />
   <div class="products-list" v-else>
     <template v-for="product in productsByCategory" :key="product.id">
-      <NuxtLink :to="{ name: 'products-id', params: { id: product.id } }">
+      <NuxtLink :to="{ name: 'products-slug', params: { slug: product.id } }">
         <UICardProduct
-          :image="product.images[0]"
+          :image="product.image"
           :price="product.price"
-          :title="product.title"
+          :name="product.name"
         /></NuxtLink>
     </template>
   </div>

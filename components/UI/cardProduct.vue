@@ -2,7 +2,7 @@
 const props = defineProps<{
   image: string,
   price: number,
-  title: string
+  name: string
 }>();
 
 
@@ -12,10 +12,10 @@ const props = defineProps<{
   <div class="card-product">
     <div class="img center">
       <UIPreloader v-if="0" />
-      <NuxtImg :src="image" />
+      <NuxtImg :src="`/images/products/${image}`" />
     </div>
     <span class="price"> {{ price }} <span> ₽ </span></span>
-    <span class="title">{{ title }} </span>
+    <span class="title">{{ name }} </span>
   </div>
 </template>
 

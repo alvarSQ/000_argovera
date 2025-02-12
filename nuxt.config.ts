@@ -18,5 +18,10 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: ['@pinia/nuxt', 'nuxt-typed-router', '@vueuse/nuxt', '@nuxt/image'],
+  modules: [
+    '@pinia/nuxt',
+    'nuxt-typed-router',
+    '@vueuse/nuxt',
+    '@nuxt/image'
+  ],
 });

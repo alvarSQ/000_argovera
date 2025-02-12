@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 
-const URL = 'https://dummyjson.com/products/';
+const URL = 'https://argovera.onrender.com/products/';
 
 export const useProductsStore = defineStore('products', () => {
   const products = ref([] as IProduct[]);
-  const productById = ref({} as IProduct);
+  const productBySlug = ref({} as IProduct);
   const productsBySearch = ref([] as IProduct[]);
 
   // const getProducts = computed(() => products.value);
@@ -12,14 +12,16 @@ export const useProductsStore = defineStore('products', () => {
   // const getProductsBySearch = computed(() => productsBySearch.value);
 
   // const getProductsById = computed(() => (id: number) => products.find(el => el.id === id))
+ 
+  
 
-  const loadProduct = async (id = '') => {
+  const loadProduct = async (slug = '') => {
     const { isLoading } = storeToRefs(useAllStore());    
-    isLoading.value = true;
+    isLoading.value = true;     
     try {
-      const data = await $fetch(`${URL}${id}`);
-      id
-        ? (productById.value = data as IProduct)
+      const data: any = await $fetch(`${URL}${slug}`);        
+      slug
+        ? (productBySlug.value = data.product as IProduct)
         : (products.value = (data as IProductsList).products);
     } catch (e) {
       console.log((e as Error).message);
@@ -40,7 +42,7 @@ export const useProductsStore = defineStore('products', () => {
         productsBySearch.value = [];
       }
       productsBySearch.value.push(...(data as IProductsList).products); 
-      productsTotal.value = (data as IProductsList).total;
+      productsTotal.value = (data as IProductsList).productsCount;
     } catch (e) {
       console.log((e as Error).message);
     } finally {
@@ -52,17 +54,17 @@ export const useProductsStore = defineStore('products', () => {
     const { breadCrumbs } = storeToRefs(useAllStore());
     breadCrumbs.value = [];
     breadCrumbs.value.push(
-      productById.value.category.replace('-', ' '),
-      productById.value.title
+      productBySlug.value.categories.replace('-', ' '),
+      productBySlug.value.name
     );
   };
 
   return {
     products,
-    productById,
+    productBySlug,
     productsBySearch,
     loadProduct,
     getBreadCrumbs,
-    searchProducts
+    searchProducts,
   };
 });

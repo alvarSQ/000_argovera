@@ -1,20 +1,31 @@
 <script setup lang="ts">
+import { useСategoriesStore } from '@/stores/categories';
 
+const сategoriesStore = useСategoriesStore();
+const { categoriesTree } = storeToRefs(useСategoriesStore());
+
+await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 </script>
 
 <template>
-        <div class="parent">
-          <div class="div1">
-            <UIBreadCrumbs />
-          </div>
-          <div class="div4">
-            <span class="title">Категории</span>
-            <UICategoriesList />
-          </div>
-          <div class="div2">
-            <slot />
-          </div>
-        </div>
+  <div class="parent">
+    <div class="div1">
+      <UIBreadCrumbs />
+    </div>
+    <div class="div4">
+      <span class="title">Категории</span>
+      <ul>
+        <UICategriesTree
+          v-for="category in categoriesTree"
+          :key="category.id"
+          :category="category"
+        />
+      </ul>
+    </div>
+    <div class="div2">
+      <slot />
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -32,6 +43,7 @@
 
 .div4 {
   grid-row-start: 2;
+  width: 250px;
 }
 
 .div5 {
