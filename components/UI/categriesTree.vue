@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { useAllStore } from '@/stores/all';
-import { useСategoriesStore } from '@/stores/categories';
 import { storeToRefs } from 'pinia';
 
 const allStore = useAllStore();
 const { activeCategoryChain } = storeToRefs(useAllStore());
-const { categoriesTree } = storeToRefs(useСategoriesStore());
 
 const props = defineProps<{
   category: ICategoriesTree;

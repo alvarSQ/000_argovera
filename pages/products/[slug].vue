@@ -24,11 +24,11 @@ const int = ref(1);
 const countPlus = () => ++int.value;
 const countMinus = () => (int.value <= 1 ? int.value : --int.value);
 
-await callOnce('prod', () => productsStore.loadProduct(slug.value))
+await callOnce('prodBySlug', () => productsStore.loadProduct(slug.value))
 
 onMounted(async () => {
   await productsStore.loadProduct(slug.value)  
-  allStore.getBreadCrumbs(productBySlug.value.id)
+  allStore.getBreadCrumbs(0, productBySlug.value.name, productBySlug.value.categories.id)
 });
 </script>
 

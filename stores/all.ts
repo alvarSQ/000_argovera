@@ -2,7 +2,14 @@ import { defineStore } from 'pinia';
 import { useСategoriesStore } from './categories';
 
 export const useAllStore = defineStore('all', () => {
-  const breadCrumbs = ref([] as number[]);
+  interface IBreadCrumbs {
+    id: number[];
+    name: string;
+  }
+  const breadCrumbs = ref({
+    id: [],
+    name: '',
+  } as IBreadCrumbs);
 
   const isLoading = ref(false);
 
@@ -28,23 +35,32 @@ export const useAllStore = defineStore('all', () => {
       return false;
     };
     findChain(categoriesTree.value);
-    
+
     return chain;
   };
 
-  const activeElement = (id: number) => {    
-    activeCategoryChain.value = getCategoryChain(id);    
+  const activeElement = (id: number) => {
+    activeCategoryChain.value = getCategoryChain(id);
   };
 
-  const getBreadCrumbs = (idProduct: number) => {
-    const { productBySlug } = storeToRefs(useProductsStore());
-    breadCrumbs.value = [];
-    breadCrumbs.value.push(...activeCategoryChain.value, idProduct);    
-  };
-
-  const updateBreadcrumbs = (newBreadcrumbs: number[]) => {
-    breadCrumbs.value = newBreadcrumbs;
-    activeCategoryChain.value = newBreadcrumbs.slice(0, -1);
+  // получаем массив вложенных категорий + имя товара из slug, эта функция также позволяет не слетать крошкам после перезагрузки страницы
+  const getBreadCrumbs = (
+    idCategory: number,
+    nameProduct: string,
+    idCategoryByProduct: number
+  ) => {
+    breadCrumbs.value = {
+      id: [],
+      name: '',
+    } as IBreadCrumbs;
+    idCategory
+      ? (activeCategoryChain.value = getCategoryChain(idCategory))
+      : null;
+    idCategoryByProduct
+      ? (activeCategoryChain.value = getCategoryChain(idCategoryByProduct))
+      : null;
+    breadCrumbs.value.id.push(...activeCategoryChain.value);
+    breadCrumbs.value.name = nameProduct;
   };
 
   return {
@@ -57,6 +73,5 @@ export const useAllStore = defineStore('all', () => {
     getBreadCrumbs,
     activeElement,
     getCategoryChain,
-    updateBreadcrumbs,
   };
 });

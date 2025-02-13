@@ -3,27 +3,20 @@ import { useСategoriesStore } from '@/stores/categories';
 
 const { breadCrumbs, activeCategoryChain } = storeToRefs(useAllStore());
 const { categoriesTree } = storeToRefs(useСategoriesStore());
-const { products } = storeToRefs(useProductsStore());
 
-const idToName = computed(() => {
-  let lastElement = breadCrumbs.value.pop() // удаляет последний элемент (id товара) из массива с категориями и сохраняет его в переменную
+const idToName = computed(() => { 
   let arrBreadCrumbs: Array<string | undefined> = [];
 
-  breadCrumbs.value.forEach(e => arrBreadCrumbs.push(findCategoryById(e)?.name));
+  breadCrumbs.value.id.forEach(e => arrBreadCrumbs.push(findCategoryById(e)?.name));
 
-  if (lastElement) arrBreadCrumbs.push(findProductNameById(lastElement));  
+  if (breadCrumbs.value.name) arrBreadCrumbs.push(breadCrumbs.value.name);  
+
   return arrBreadCrumbs;
 })
 
 const slugForLink = computed(() => {
-  return breadCrumbs.value.map(e => findCategoryById(e)?.slug).filter(Boolean) as string[];
+  return breadCrumbs.value.id.map(e => findCategoryById(e)?.slug).filter(Boolean) as string[];
 });
-
-
-const findProductNameById = (id: number): string | undefined => {
-  const product = products.value.find(e => e.id === id);
-  return product ? product.name : undefined;
-}
 
 interface ICategoriesInBreadCrumbs {
   id: number,
@@ -41,14 +34,12 @@ const findCategoryById = (id: number): ICategoriesInBreadCrumbs | undefined => {
         slug: category.slug
       };
     }
-
     for (const child of category.children) {
       const result = searchCategory(child);
       if (result) return result;
     }
     return undefined;
   };
-
   // Поиск во всех категориях верхнего уровня
   for (const category of categoriesTree.value) {
     const result = searchCategory(category);

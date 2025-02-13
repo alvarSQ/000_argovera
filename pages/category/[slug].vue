@@ -5,28 +5,18 @@ import { useAllStore } from '@/stores/all';
 const allStore = useAllStore();
 const сategoriesStore = useСategoriesStore();
 
-const { activeCategoryChain } = storeToRefs(useAllStore());
 const { productsByCategory } = storeToRefs(useСategoriesStore());
-const { breadCrumbs, isLoading } = storeToRefs(useAllStore());
+const { isLoading } = storeToRefs(useAllStore());
 
 const route = useRoute('category-slug');
 const slug = computed(() => route.params.slug);
 
 await callOnce(() => сategoriesStore.loadCategories('', slug.value))
+await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 
-// const getBreadCrumbs = () => {
-//   breadCrumbs.value = [];
-//   breadCrumbs.value.push(titleCategory.value.toLowerCase());
-// };
-
-// const titleCategory = computed(() => {
-//   let str = slug.value.replace('-', ' ');
-//   return str.toUpperCase();
-// });
-
-onMounted(() => {
-  сategoriesStore.loadCategories('', slug.value);
-  allStore.getBreadCrumbs(0)
+onMounted(async () => {
+  await сategoriesStore.loadCategories('', slug.value);
+  allStore.getBreadCrumbs(productsByCategory.value.category.id, '', 0)
 })
 </script>
 
@@ -49,5 +39,5 @@ onMounted(() => {
 </template>
 
 <style lang=" scss" scoped>
-          </style>
+</style>
     
