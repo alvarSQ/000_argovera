@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useСategoriesStore } from '@/stores/categories';
 
+const allStore = useAllStore();
 const сategoriesStore = useСategoriesStore();
 const { categoriesTree } = storeToRefs(useСategoriesStore());
 
@@ -15,11 +16,12 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
     <div class="div4">
       <span class="title">Категории</span>
       <ul class="flex-column">
-        <UICategriesTree v-for="category in categoriesTree" :key="category.id" :category="category"/>
+        <UICategriesTree v-for="category in categoriesTree" :key="category.id" :category="category" />
       </ul>
     </div>
     <div class="div2">
-      <slot />
+      <slot>
+      </slot>
     </div>
   </div>
 </template>

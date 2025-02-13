@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useСategoriesStore } from '@/stores/categories';
+
+const allStore = useAllStore();
+const сategoriesStore = useСategoriesStore();
 const router = useRouter();
 
 const productsStore = useProductsStore();
@@ -25,6 +29,7 @@ await callOnce(() => productsStore.loadProduct())
 // const removeSpaces = (title: string) => title = title.toLowerCase().replace(/\s/g, "-")
 // productsStore.loadProduct()
 // onMounted(() => productsStore.loadProduct());
+await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 </script>
 
 <template>
@@ -35,19 +40,16 @@ await callOnce(() => productsStore.loadProduct())
     <span class="main-caption">Популярные товары</span>
     <div class="products-main">
       <template v-for="(product, index) in products" :key="product.id">
-        <NuxtLink :to="{ name: 'products-slug', params: { slug: product.slug } }" v-if="index > 10 && index < 21">
-        <UICardProduct
-          :image="product.image"
-          :price="product.price"
-          :name="product.name"
-          v-if="index > 10 && index < 21"
-        /></NuxtLink>
+        <NuxtLink :to="{ name: 'products-slug', params: { slug: product.slug } }" v-if="index >= 0 && index < 10">
+          <UICardProduct :image="product.image" :price="product.price" :name="product.name"
+            v-if="index >= 0 && index < 10" @click="allStore.activeElement(product.categories.id)" />
+        </NuxtLink>
       </template>
     </div>
-    <!-- <UIPreloader v-if="pending" />
-      <p v-else>Привет {{ fN }}</p>
+    <!-- <UIPreloader v-if=" pending" />
+          <p v-else>Привет {{ fN }}</p>
 
-      <button class="btn" @click="authStore.logUserOut()">logout</button> -->
+          <button class="btn" @click="authStore.logUserOut()">logout</button> -->
   </div>
 </template>
 

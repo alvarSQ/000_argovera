@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAllStore } from '@/stores/all';
 import { useСategoriesStore } from '@/stores/categories';
-import { storeToRefs } from 'pinia'; // Убедитесь, что импортировали storeToRefs
+import { storeToRefs } from 'pinia';
 
 const allStore = useAllStore();
 const { activeCategoryChain } = storeToRefs(useAllStore());
@@ -19,24 +19,8 @@ const toggleChildren = (categoryId: number) => {
     activeCategoryChain.value = activeCategoryChain.value.slice(0, index);
   } else {
     // Иначе добавляем её в цепочку
-    activeCategoryChain.value = getCategoryChain(categoryId);
+    activeCategoryChain.value = allStore.getCategoryChain(categoryId);
   }
-};
-
-// Получение цепочки категорий от корня до текущей
-const getCategoryChain = (categoryId: number): number[] => {
-  const chain: number[] = [];
-  const findChain = (categories: ICategoriesTree[]): boolean => {
-    for (const category of categories) {
-      chain.push(category.id);
-      if (category.id === categoryId) return true; // Нашли целевую категорию
-      if (category.children && findChain(category.children)) return true; // Рекурсивно ищем в детях
-      chain.pop(); // Убираем категорию из цепочки, если она не ведёт к целевой
-    }
-    return false;
-  };
-  findChain(categoriesTree.value);
-  return chain;
 };
 
 // Проверка, открыта ли текущая категория

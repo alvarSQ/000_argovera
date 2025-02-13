@@ -2,6 +2,7 @@
 const route = useRoute('products-slug');
 
 const productsStore = useProductsStore();
+const allStore = useAllStore();
 
 const { productBySlug } = storeToRefs(useProductsStore());
 const { isLoading } = storeToRefs(useAllStore());
@@ -27,7 +28,7 @@ await callOnce('prod', () => productsStore.loadProduct(slug.value))
 
 onMounted(async () => {
   await productsStore.loadProduct(slug.value)  
-  // productsStore.getBreadCrumbs()
+  allStore.getBreadCrumbs(productBySlug.value.id)
 });
 </script>
 

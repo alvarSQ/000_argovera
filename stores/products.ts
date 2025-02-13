@@ -52,21 +52,11 @@ export const useProductsStore = defineStore('products', () => {
     }
   };
 
-  const getBreadCrumbs = () => {
-    const { breadCrumbs } = storeToRefs(useAllStore());
-    breadCrumbs.value = [];
-    breadCrumbs.value.push(
-      productBySlug.value.categories.replace('-', ' '),
-      productBySlug.value.name
-    );
-  };
-
   return {
     products,
     productBySlug,
     productsBySearch,
     loadProduct,
-    getBreadCrumbs,
     searchProducts,
   };
 });

@@ -1,20 +1,21 @@
 <script setup lang="ts">
 const props = defineProps<{
   image: string,
-  price: number,
+  price?: number,
   name: string
+  caterory?: boolean
 }>();
 
 
 </script>
 
 <template>
-  <div class="card-product">
+  <div class="card-product" :class="{ 'card-category': caterory }">
     <div class="img center">
       <UIPreloader v-if="0" />
       <NuxtImg :src="`/images/products/${image}`" />
     </div>
-    <span class="price"> {{ price }} <span> ₽ </span></span>
+    <span class="price" v-if="price"> {{ price }} <span> ₽ </span></span>
     <span class="title">{{ name }} </span>
   </div>
 </template>
@@ -59,5 +60,10 @@ const props = defineProps<{
     box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1) inset;
     transform: scale(0.98)
   }
+}
+
+.card-category {
+  height: wmax(250);
+  gap: 30px;
 }
 </style>
