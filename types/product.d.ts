@@ -18,7 +18,7 @@ declare interface IProduct {
   visibility: boolean;
   favoritesCount: number;
   createdAt: string;
-  categories: Categories;
-  brands: Brands;
+  categories: ICategories;
+  brands: IBrands;
   favorited: boolean;
 }

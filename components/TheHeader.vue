@@ -1,12 +1,28 @@
 <script setup lang="ts">
 import { useWindowScroll } from '@vueuse/core';
-import { useAllStore } from '@/stores/all';
+
+const authStore = useAuthStore();
 const { activeCategoryChain } = storeToRefs(useAllStore());
+const { user, token } = storeToRefs(useAuthStore());
 
 const { y: scrollY } = useWindowScroll();
 
 const isHeader = computed(() => (scrollY.value < 30 ? false : true));
 
+const isModal = ref(false)
+
+const openModal = () => {
+  document.body.classList.add('modal-open');
+  isModal.value = true
+  // Открытие модального окна
+};
+
+const closeModal = () => {
+  document.body.classList.remove('modal-open');
+  isModal.value = false
+  // Закрытие модального окна
+};
+await callOnce('userByCookie', () => authStore.authUser('user'))
 </script>
 
 <template>
@@ -15,7 +31,8 @@ const isHeader = computed(() => (scrollY.value < 30 ? false : true));
       <div class="container">
         <div class="navbar-content menu-top" v-show="!isHeader">
           <span>Пермь, ул. Луначарского, 90</span>
-          <div>Вход | Регистрация</div>
+          <div class="register" v-if="user.username">{{ user.username }}</div>
+          <div class="register" @click="openModal" v-else>Вход | Регистрация</div>
         </div>
         <div class="navbar-content">
           <div class="icon-block">
@@ -72,10 +89,15 @@ const isHeader = computed(() => (scrollY.value < 30 ? false : true));
       </div>
     </div>
   </header>
+  <AuthModal v-if="isModal" @close-modal="closeModal" />
 </template>
 
 <style lang="scss" scoped>
 @use '@/assets/scss/utils/vars.scss' as *;
+
+.register {
+  font-weight: 400;
+}
 
 .fix {
   position: fixed;

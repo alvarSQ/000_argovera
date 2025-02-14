@@ -39,6 +39,10 @@ body {
   padding: 0;
 }
 
+.modal-open {
+  overflow: hidden;
+}
+
 *,
 *:before,
 *:after {
@@ -135,4 +139,13 @@ section,
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
+}
+
+.register {
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover {
+    color: $primary-color;
+  }
 }

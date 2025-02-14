@@ -6,47 +6,54 @@ const allStore = useAllStore();
 
 const { productBySlug } = storeToRefs(useProductsStore());
 const { isLoading } = storeToRefs(useAllStore());
+const { token } = storeToRefs(useAuthStore());
 
 const slug = computed(() => route.params.slug);
-const hasProduct = computed(() => (productBySlug.value.name && isLoading.value));
+const hasProduct = computed(() => productBySlug.value.name && isLoading.value);
 const discont = computed(
   () =>
-    (productBySlug.value.price -
+    (productBySlug.value.price +
       (productBySlug.value.price * productBySlug.value.discountPercentage) /
-        100) *
+      100) *
     int.value
 );
-
-const round_mod = (value: number) => Math.round(value * 100) / 100; // округление до двух знаков после запятой
 
 const int = ref(1);
 
 const countPlus = () => ++int.value;
 const countMinus = () => (int.value <= 1 ? int.value : --int.value);
 
-await callOnce('prodBySlug', () => productsStore.loadProduct(slug.value))
+const isFavorite = ref(false);
+
+await callOnce('prodBySlug', () => productsStore.loadProduct(slug.value));
+
+watch(
+  () => token.value,
+  (newValue, oldValue) => productsStore.loadProduct(slug.value)
+);
 
 onMounted(async () => {
-  await productsStore.loadProduct(slug.value)  
-  allStore.getBreadCrumbs(0, productBySlug.value.name, productBySlug.value.categories.id)
+  await productsStore.loadProduct(slug.value);
+  allStore.getBreadCrumbs(
+    0,
+    productBySlug.value.name,
+    productBySlug.value.categories.id
+  );
 });
 </script>
 
 <template>
   <UIPreloader v-if="hasProduct" />
   <div class="parent" v-else>
-    <div class="div3 title">{{ productBySlug.name}}</div>
+    <div class="div3 title">{{ productBySlug.name }}</div>
     <div class="div4 center">
       <NuxtImg :src="`/images/products/${productBySlug.image}`" />
     </div>
     <div class="div5">
       <span class="title-main">{{ productBySlug.name }}</span>
       <div>
-        <span class="price-discont"
-          >{{ productBySlug.price }}<span>&nbsp;₽</span></span
-        ><span class="price"
-          >&nbsp;{{ round_mod(discont) }}<span>&nbsp;₽</span></span
-        >
+        <span class="price-discont">{{ Math.round(discont) }}<span>&nbsp;₽</span></span><span class="price">&nbsp;{{
+          productBySlug.price }}<span>&nbsp;₽</span></span>
       </div>
       <div class="flex-line">
         <div class="int center">{{ int }}</div>
@@ -55,31 +62,34 @@ onMounted(async () => {
           <div class="count center" @click="countMinus">&#9660;</div>
         </div>
         <div class="btn">В корзину</div>
-        <div class="int center favorite">
-          <svg
-            viewBox="0 0 23 23"
-            width="26px"
-            height="26px"
-            fill="currentColor"
-          >
+        <div class="int center" @click="productsStore.inFavorite(slug)">
+          <svg viewBox="0.8 0.5 22 22" width="33px" height="33px" fill="currentColor" v-if="productBySlug.favorited">
             <path
-              d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"
-            ></path>
+              d="M19.3 5.71002C18.841 5.24601 18.2943 4.87797 17.6917 4.62731C17.0891 4.37666 16.4426 4.2484 15.79 4.25002C15.1373 4.2484 14.4909 4.37666 13.8883 4.62731C13.2857 4.87797 12.739 5.24601 12.28 5.71002L12 6.00002L11.72 5.72001C10.7917 4.79182 9.53273 4.27037 8.22 4.27037C6.90726 4.27037 5.64829 4.79182 4.72 5.72001C3.80386 6.65466 3.29071 7.91125 3.29071 9.22002C3.29071 10.5288 3.80386 11.7854 4.72 12.72L11.49 19.51C11.6306 19.6505 11.8212 19.7294 12.02 19.7294C12.2187 19.7294 12.4094 19.6505 12.55 19.51L19.32 12.72C20.2365 11.7823 20.7479 10.5221 20.7442 9.21092C20.7405 7.89973 20.2218 6.64248 19.3 5.71002Z"
+              fill="currentColor" />
           </svg>
+          <svg viewBox="0.8 0.5 22 22" width="33px" height="33px" fill="currentColor" v-else>
+            <path
+              d="M12 19.7501C11.8012 19.7499 11.6105 19.6708 11.47 19.5301L4.70001 12.7401C3.78387 11.8054 3.27072 10.5488 3.27072 9.24006C3.27072 7.9313 3.78387 6.6747 4.70001 5.74006C5.6283 4.81186 6.88727 4.29042 8.20001 4.29042C9.51274 4.29042 10.7717 4.81186 11.7 5.74006L12 6.00006L12.28 5.72006C12.739 5.25606 13.2857 4.88801 13.8883 4.63736C14.4909 4.3867 15.1374 4.25845 15.79 4.26006C16.442 4.25714 17.088 4.38382 17.6906 4.63274C18.2931 4.88167 18.8402 5.24786 19.3 5.71006C20.2161 6.6447 20.7293 7.9013 20.7293 9.21006C20.7293 10.5188 20.2161 11.7754 19.3 12.7101L12.53 19.5001C12.463 19.5752 12.3815 19.636 12.2904 19.679C12.1994 19.7219 12.1006 19.7461 12 19.7501ZM8.21001 5.75006C7.75584 5.74675 7.30551 5.83342 6.885 6.00505C6.4645 6.17669 6.08215 6.42989 5.76001 6.75006C5.11088 7.40221 4.74646 8.28491 4.74646 9.20506C4.74646 10.1252 5.11088 11.0079 5.76001 11.6601L12 17.9401L18.23 11.6801C18.5526 11.3578 18.8086 10.9751 18.9832 10.5538C19.1578 10.1326 19.2477 9.68107 19.2477 9.22506C19.2477 8.76905 19.1578 8.31752 18.9832 7.89627C18.8086 7.47503 18.5526 7.09233 18.23 6.77006C17.9104 6.44929 17.5299 6.1956 17.1109 6.02387C16.6919 5.85215 16.2428 5.76586 15.79 5.77006C15.3358 5.76675 14.8855 5.85342 14.465 6.02505C14.0445 6.19669 13.6621 6.44989 13.34 6.77006L12.53 7.58006C12.3869 7.71581 12.1972 7.79149 12 7.79149C11.8028 7.79149 11.6131 7.71581 11.47 7.58006L10.66 6.77006C10.3395 6.44628 9.95791 6.18939 9.53733 6.01429C9.11675 5.83919 8.66558 5.74937 8.21001 5.75006Z"
+              fill="currentColor" />
+          </svg>
+          <!-- <svg viewBox="0 0 23 23" width="26px" height="26px" fill="currentColor" v-else>
+            <path
+              d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z">
+            </path>
+          </svg> -->
         </div>
       </div>
       <div class="flex-column">
         <span><span class="gray">Код:</span> {{ productBySlug.code }}</span>
         <span><span class="gray">Баллы:</span> {{ productBySlug.code }}</span>
-        <span
-          ><span class="gray">Производитель:</span>
-          {{ productBySlug.brands.name }}</span
-        >
+        <span><span class="gray">Производитель:</span>
+          {{ productBySlug.brands.name }}</span>
       </div>
       <div class="btn one-click">Купить в один клик</div>
     </div>
     <div class="div6">
-    <UIDescriptReview />
+      <UIDescriptReview />
     </div>
     <div class="div7"></div>
   </div>
@@ -108,6 +118,7 @@ onMounted(async () => {
   background-color: #fff;
   cursor: pointer;
 }
+
 .favorite-on {
   color: #fff;
   background-color: $primary-color;
@@ -181,7 +192,7 @@ onMounted(async () => {
 }
 
 .div6 {
-    grid-column: span 2 / span 2;
+  grid-column: span 2 / span 2;
 }
 
 .div7 {

@@ -1,5 +1,7 @@
 declare interface IUserLogin {
-    username: string,
-    password: string
-    expiresInMins?: number
+  user: {
+    username?: string;
+    email: string;
+    password: string;
+  };
 }
