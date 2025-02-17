@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+const productsStore = useProductsStore();
 const authStore = useAuthStore();
 const router = useRouter();
 
@@ -17,6 +18,7 @@ const userInputAuth = async () => {
     delete userInput.user.username;
   }
   await authStore.authUser(type, userInput);
+  await productsStore.favoritedProducts(0);
   emit('closeModal')
 };
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const productsStore = useProductsStore();
 
-const { breadCrumbs, searchQuery, productsTotal, limitScroll, isLoading, activeCategoryChain } = storeToRefs(useAllStore());
+const { breadCrumbs, searchQuery, productsCountSerch, limitScroll, isLoading, activeCategoryChain } = storeToRefs(useAllStore());
 const { productsBySearch } = storeToRefs(useProductsStore());
 
 const route = useRoute('products-search');
@@ -13,7 +13,7 @@ const offset = ref(0)
 await callOnce(() => productsStore.searchProducts(offset.value, queryRoute.value as string))
 
 const productsInfinite = () => {
-  if (offset.value !== 0 && offset.value >= productsTotal.value) return;
+  if (offset.value !== 0 && offset.value >= productsCountSerch.value) return;
   if (isLoading.value) return;  
   return productsStore.searchProducts(offset.value, queryRoute.value as string)
 };
@@ -29,7 +29,7 @@ const checkPosition = () => {
   // Низ экрана относительно страницы
   const position = scrolled + screenHeight;
 
-  if (position >= threshold && productsTotal.value >= limitScroll.value) {
+  if (position >= threshold && productsCountSerch.value >= limitScroll.value) {
     offset.value = productsBySearch.value.length
     productsInfinite()
   }
@@ -77,7 +77,7 @@ onUnmounted(() => {
 <template>
   <span class="title" style="font-weight: 400">По запросу <span style="font-weight: 900">{{ queryRoute }}</span>
     найдено:
-    {{ formatProductsCount(productsTotal) }}</span>
+    {{ formatProductsCount(productsCountSerch) }}</span>
   <div class="products-list">
     <template v-for="product in productsBySearch" :key="product.id">
       <UICardProduct :image="product.image" :price="product.price" :name="product.name"

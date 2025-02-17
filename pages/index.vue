@@ -56,7 +56,7 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 .content-main {
   display: flex;
   flex-direction: column;
-  margin-top: -18px;
+  margin-top: -20px;
   gap: 20px;
 }
 </style>

@@ -40,6 +40,11 @@ watch(
   (newValue, oldValue) => productsStore.loadProduct(slug.value)
 );
 
+watch(
+  () => productBySlug.value.favorited,
+  () => productsStore.favoritedProducts(0)
+);
+
 onMounted(async () => {
   // await productsStore.loadProduct(slug.value);
   allStore.getBreadCrumbs(

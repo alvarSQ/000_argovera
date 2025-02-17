@@ -17,7 +17,8 @@ export const useAllStore = defineStore('all', () => {
 
   const limitScroll = ref(16);
 
-  const productsTotal = ref(0);
+  const productsCountSerch = ref(0);
+  const productsCountFav = ref(0);
 
   const activeCategoryChain = ref([] as number[]);
 
@@ -68,7 +69,8 @@ export const useAllStore = defineStore('all', () => {
     isLoading,
     searchQuery,
     limitScroll,
-    productsTotal,
+    productsCountSerch,
+    productsCountFav,
     activeCategoryChain,
     getBreadCrumbs,
     activeElement,

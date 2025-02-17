@@ -3,19 +3,13 @@ import consola from 'consola';
 
 // const URL = 'https://argovera.onrender.com/products/';
 
-const URL = 'http://localhost:10000/products/';
+const URL = 'http://localhost:10000/products';
 
 export const useProductsStore = defineStore('products', () => {
   const products = ref([] as IProduct[]);
   const productBySlug = ref({} as IProduct);
   const productsBySearch = ref([] as IProduct[]);
-
-  // const getProducts = computed(() => products.value);
-  // const getProductById = computed(() => productById.value);
-  // const getProductsBySearch = computed(() => productsBySearch.value);
-
-  // const getProductsById = computed(() => (id: number) => products.find(el => el.id === id))
- 
+  const productsByFavorited = ref([] as IProduct[]);
   
 
   const loadProduct = async (slug = '') => {
@@ -23,7 +17,7 @@ export const useProductsStore = defineStore('products', () => {
     const { token } = storeToRefs(useAuthStore());    
     isLoading.value = true;     
     try {
-      const data: any = await $fetch(`${URL}${slug}`, {
+      const data: any = await $fetch(`${URL}/${slug}`, {
         headers: { Authorization: `${token.value}` }
       });        
       slug
@@ -43,7 +37,7 @@ export const useProductsStore = defineStore('products', () => {
     let metodSet = 'POST' as 'POST' | 'DELETE';
     productBySlug.value.favorited ? (metodSet = 'DELETE') : metodSet
     try {
-      const data = await $fetch(`${URL}${slug}/favorite`, {
+      const data = await $fetch(`${URL}/${slug}/favorite`, {
         method: metodSet,
         headers: { Authorization: `${token.value}` },
       });      
@@ -56,18 +50,18 @@ export const useProductsStore = defineStore('products', () => {
   };
 
   const searchProducts = async (offset: number, q: string) => {
-    const { isLoading, limitScroll, productsTotal } =
+    const { isLoading, limitScroll, productsCountSerch } =
       storeToRefs(useAllStore());
-    isLoading.value = true;
+    isLoading.value = true; 
     try {
-      const data = await $fetch(`${URL}search`, {
+      const data = await $fetch(`${URL}/search`, {
         params: { q, limit: limitScroll.value, offset },
       });
       if (offset === 0) {
         productsBySearch.value = [];
       }
       productsBySearch.value.push(...(data as IProductsList).products);
-      productsTotal.value = (data as IProductsList).productsCount;
+      productsCountSerch.value = (data as IProductsList).productsCount;
     } catch (e) {
       console.log((e as Error).message);
     } finally {
@@ -75,12 +69,43 @@ export const useProductsStore = defineStore('products', () => {
     }
   };
 
+  const favoritedProducts = async (offset: number) => {
+    const { isLoading, limitScroll, productsCountFav } =
+      storeToRefs(useAllStore());
+    const { user, token } = storeToRefs(useAuthStore()); 
+    isLoading.value = true;
+    try {
+      if (user.value.username) {
+        const data = await $fetch(`${URL}`, {
+          params: {
+            f: user.value.username,
+            limit: limitScroll.value,
+            offset,
+          },
+          headers: { Authorization: `${token.value}` },
+        });
+        if (offset === 0) {
+          productsByFavorited.value = [];
+        }
+        productsByFavorited.value.push(...(data as IProductsList).products);
+        productsCountFav.value = (data as IProductsList).productsCount;
+      }
+    } catch (e) {
+      console.log((e as Error).message);
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
+
   return {
     products,
     productBySlug,
     productsBySearch,
+    productsByFavorited,
     loadProduct,
     inFavorite,
     searchProducts,
+    favoritedProducts,
   };
 });
