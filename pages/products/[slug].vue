@@ -9,7 +9,7 @@ const { isLoading } = storeToRefs(useAllStore());
 const { token } = storeToRefs(useAuthStore());
 
 const slug = computed(() => route.params.slug);
-const hasProduct = computed(() => productBySlug.value.name && isLoading.value);
+// const hasProduct = computed(() => productBySlug.value.name && isLoading.value);
 const discont = computed(
   () =>
     (productBySlug.value.price +
@@ -25,7 +25,15 @@ const countMinus = () => (int.value <= 1 ? int.value : --int.value);
 
 const isFavorite = ref(false);
 
-await callOnce('prodBySlug', () => productsStore.loadProduct(slug.value));
+const { data, error } = await useAsyncData(
+  'product',
+  async () => {
+    await productsStore.loadProduct(slug.value);
+    return productBySlug.value;
+  }
+);
+
+const hasProduct = computed(() => !data.value || isLoading.value);
 
 watch(
   () => token.value,
@@ -33,7 +41,7 @@ watch(
 );
 
 onMounted(async () => {
-  await productsStore.loadProduct(slug.value);
+  // await productsStore.loadProduct(slug.value);
   allStore.getBreadCrumbs(
     0,
     productBySlug.value.name,
@@ -73,11 +81,6 @@ onMounted(async () => {
               d="M12 19.7501C11.8012 19.7499 11.6105 19.6708 11.47 19.5301L4.70001 12.7401C3.78387 11.8054 3.27072 10.5488 3.27072 9.24006C3.27072 7.9313 3.78387 6.6747 4.70001 5.74006C5.6283 4.81186 6.88727 4.29042 8.20001 4.29042C9.51274 4.29042 10.7717 4.81186 11.7 5.74006L12 6.00006L12.28 5.72006C12.739 5.25606 13.2857 4.88801 13.8883 4.63736C14.4909 4.3867 15.1374 4.25845 15.79 4.26006C16.442 4.25714 17.088 4.38382 17.6906 4.63274C18.2931 4.88167 18.8402 5.24786 19.3 5.71006C20.2161 6.6447 20.7293 7.9013 20.7293 9.21006C20.7293 10.5188 20.2161 11.7754 19.3 12.7101L12.53 19.5001C12.463 19.5752 12.3815 19.636 12.2904 19.679C12.1994 19.7219 12.1006 19.7461 12 19.7501ZM8.21001 5.75006C7.75584 5.74675 7.30551 5.83342 6.885 6.00505C6.4645 6.17669 6.08215 6.42989 5.76001 6.75006C5.11088 7.40221 4.74646 8.28491 4.74646 9.20506C4.74646 10.1252 5.11088 11.0079 5.76001 11.6601L12 17.9401L18.23 11.6801C18.5526 11.3578 18.8086 10.9751 18.9832 10.5538C19.1578 10.1326 19.2477 9.68107 19.2477 9.22506C19.2477 8.76905 19.1578 8.31752 18.9832 7.89627C18.8086 7.47503 18.5526 7.09233 18.23 6.77006C17.9104 6.44929 17.5299 6.1956 17.1109 6.02387C16.6919 5.85215 16.2428 5.76586 15.79 5.77006C15.3358 5.76675 14.8855 5.85342 14.465 6.02505C14.0445 6.19669 13.6621 6.44989 13.34 6.77006L12.53 7.58006C12.3869 7.71581 12.1972 7.79149 12 7.79149C11.8028 7.79149 11.6131 7.71581 11.47 7.58006L10.66 6.77006C10.3395 6.44628 9.95791 6.18939 9.53733 6.01429C9.11675 5.83919 8.66558 5.74937 8.21001 5.75006Z"
               fill="currentColor" />
           </svg>
-          <!-- <svg viewBox="0 0 23 23" width="26px" height="26px" fill="currentColor" v-else>
-            <path
-              d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z">
-            </path>
-          </svg> -->
         </div>
       </div>
       <div class="flex-column">
@@ -111,6 +114,7 @@ onMounted(async () => {
   font-size: 20px;
   color: $primary-color;
   border-radius: 10px;
+  align-items: center;
 }
 
 .favorite {
@@ -156,6 +160,7 @@ onMounted(async () => {
 }
 
 .div4 {
+  padding: 20px;
   grid-row-start: 2;
 }
 

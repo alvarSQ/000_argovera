@@ -55,18 +55,18 @@ export const useProductsStore = defineStore('products', () => {
     }
   };
 
-  const searchProducts = async (skip: number, q: string) => {
+  const searchProducts = async (offset: number, q: string) => {
     const { isLoading, limitScroll, productsTotal } =
       storeToRefs(useAllStore());
-    isLoading.value = true;    
+    isLoading.value = true;
     try {
-      const data = await $fetch(`${URL}/search`, {
-        params: { q, limit: limitScroll.value, skip },
+      const data = await $fetch(`${URL}search`, {
+        params: { q, limit: limitScroll.value, offset },
       });
-      if (skip === 0) {
+      if (offset === 0) {
         productsBySearch.value = [];
       }
-      productsBySearch.value.push(...(data as IProductsList).products); 
+      productsBySearch.value.push(...(data as IProductsList).products);
       productsTotal.value = (data as IProductsList).productsCount;
     } catch (e) {
       console.log((e as Error).message);

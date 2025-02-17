@@ -1,21 +1,21 @@
 <script setup lang="ts">
 const productsStore = useProductsStore();
 
-const { breadCrumbs, searchQuery, productsTotal, limitScroll, isLoading } = storeToRefs(useAllStore());
+const { breadCrumbs, searchQuery, productsTotal, limitScroll, isLoading, activeCategoryChain } = storeToRefs(useAllStore());
 const { productsBySearch } = storeToRefs(useProductsStore());
 
 const route = useRoute('products-search');
 
 const queryRoute = computed(() => route.query.q);
 
-const skip = ref(0)
+const offset = ref(0)
 
-await callOnce(() => productsStore.searchProducts(skip.value, queryRoute.value as string))
+await callOnce(() => productsStore.searchProducts(offset.value, queryRoute.value as string))
 
 const productsInfinite = () => {
-  if (skip.value !== 0 && skip.value >= productsTotal.value) return;
+  if (offset.value !== 0 && offset.value >= productsTotal.value) return;
   if (isLoading.value) return;  
-  return productsStore.searchProducts(skip.value, queryRoute.value as string)
+  return productsStore.searchProducts(offset.value, queryRoute.value as string)
 };
 
 const checkPosition = () => {
@@ -30,7 +30,7 @@ const checkPosition = () => {
   const position = scrolled + screenHeight;
 
   if (position >= threshold && productsTotal.value >= limitScroll.value) {
-    skip.value = productsBySearch.value.length
+    offset.value = productsBySearch.value.length
     productsInfinite()
   }
 };
@@ -52,8 +52,8 @@ const formatProductsCount = (count: number): string => {
 watch(
   () => route.query.q,
   () => {
-    skip.value = 0
-    return productsStore.searchProducts(skip.value, queryRoute.value as string);
+    offset.value = 0
+    return productsStore.searchProducts(offset.value, queryRoute.value as string);
   },
 );
 
@@ -61,7 +61,11 @@ watch(
 
 
 onMounted(() => {
-  breadCrumbs.value = [];
+  breadCrumbs.value = {
+    id: [],
+    name: '',
+  }
+  activeCategoryChain.value = []
   window.addEventListener('scroll', checkPosition);
 });
 onUnmounted(() => {
@@ -71,18 +75,13 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <span class="title" style="font-weight: 400"
-    >По запросу <span style="font-weight: 900">{{ queryRoute }}</span> найдено:
-    {{ formatProductsCount(productsTotal) }}</span
-  >
+  <span class="title" style="font-weight: 400">По запросу <span style="font-weight: 900">{{ queryRoute }}</span>
+    найдено:
+    {{ formatProductsCount(productsTotal) }}</span>
   <div class="products-list">
     <template v-for="product in productsBySearch" :key="product.id">
-      <UICardProduct
-        :image="product.images[0]"
-        :price="product.price"
-        :title="product.title"
-        @click="navigateTo({ name: 'products-id', params: { id: product.id } })"
-      />
+      <UICardProduct :image="product.image" :price="product.price" :name="product.name"
+        @click="navigateTo({ name: 'products-slug', params: { slug: product.slug } })" />
     </template>
   </div>
 </template>
