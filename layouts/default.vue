@@ -14,10 +14,11 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
       <UIBreadCrumbs />
     </div>
     <div class="div4">
-      <span class="title">Категории</span>
+      <div class="title">Категории</div>
       <ul class="flex-column">
         <UICategriesTree v-for="category in categoriesTree" :key="category.id" :category="category" />
       </ul>
+      <div class="title">Производители</div>
     </div>
     <div class="div2">
       <slot>
@@ -33,6 +34,7 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
   margin-top: 10px;
   line-height: 1.2;
   gap: 10px;
+  margin-bottom: 15px;
 }
 
 .parent {

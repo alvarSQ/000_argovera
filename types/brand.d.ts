@@ -1,4 +1,4 @@
-declare interface IBrands {
+declare interface IBrand {
   id: number;
   slug: string;
   name: string;

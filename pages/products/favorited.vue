@@ -3,10 +3,7 @@ const productsStore = useProductsStore();
 
 const { breadCrumbs, searchQuery, productsCountFav, limitScroll, isLoading, activeCategoryChain } = storeToRefs(useAllStore());
 const { productsByFavorited } = storeToRefs(useProductsStore());
-
-const route = useRoute('products-favorited');
-
-const queryRoute = computed(() => route.query.f);
+const { user } = storeToRefs(useAuthStore());
 
 const offset = ref(0)
 
@@ -64,7 +61,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <span class="title" style="font-weight: 400"><span style="font-weight: 900">{{ queryRoute }}</span>, в вашем избранном:
+    <span class="title" style="font-weight: 400"><span style="font-weight: 900">{{ user.username }}</span>, в вашем избранном:
         {{ formatProductsCount(productsCountFav) }}</span>
     <div class="products-list">
         <template v-for="product in productsByFavorited" :key="product.id">

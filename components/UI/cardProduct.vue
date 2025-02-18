@@ -25,10 +25,40 @@ const props = defineProps<{
 
 .title {
   color: #007800;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   overflow: hidden;
+  hyphens: auto;
+
   &:hover {
     overflow: visible;
+    line-clamp: unset;
+    -webkit-line-clamp: unset;
   }
+
+  @media (min-width: 1800px) {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
+
+  @media (max-width: 1380px) and (min-width: 900px) {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+
+  @media (max-width: 615px) and (min-width: 515px) {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+
+    @media (max-width: 360px) {
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+    }
 }
 
 .price {
@@ -36,10 +66,19 @@ const props = defineProps<{
   font-weight: 600;
   text-align: left;
   color: $primary-color;
+
+  @media (max-width: 1095px) {
+    font-size: wmax(32);
+  }
+
+  @media (max-width: 360px) {
+    font-size: 18px;
+  }
 }
 
 .img {
   height: 60%;
+
   img {
     height: 100%;
   }
@@ -56,10 +95,29 @@ const props = defineProps<{
   box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
   transition: .5s;
   cursor: pointer;
+
   &:hover {
     box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1) inset;
     transform: scale(0.98)
   }
+
+  @media (max-width: 1095px) {
+    height: wmax(420);
+  }
+
+  @media (max-width: 900px) {
+    height: wmax(550);
+  }
+
+  @media (max-width: 515px) {
+    gap: 5px;
+  }
+
+  @media (max-width: 360px) {
+    height: wmax(1600);
+  }
+
+
 }
 
 .card-category {

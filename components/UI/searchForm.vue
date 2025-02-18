@@ -37,6 +37,9 @@ const isSearch = computed(() => searchQuery.value ? false : true)
 .wrapper-search {
   display: flex;
   align-items: center;
+  @media (max-width: 560px) {
+      display: none;
+    }
 }
 
 .choice {

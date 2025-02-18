@@ -88,6 +88,7 @@ section,
 .container {
   margin: 0 auto;
   width: wmax(1416);
+  min-width: 270px;
   font-family: $mainFont;
   font-weight: 400;
 }
@@ -125,13 +126,26 @@ section,
 
 .content {
   margin-top: 150px;
+  @media (max-width: 1210px) {
+    margin-top: 84px;
+  }
 }
 
 .title {
   color: $primary-color;
+  font-family: $mainFont;
   font-size: wmax(20);
   font-weight: 700;
   letter-spacing: 0.4px;
+  @media (max-width: 1095px) {
+    font-size: wmax(28);
+  }
+  @media (max-width: 1095px) {
+    font-size: wmax(32);
+  }
+  @media (max-width: 360px) {
+    font-size: 16px;
+  }
 }
 
 .products-list {
