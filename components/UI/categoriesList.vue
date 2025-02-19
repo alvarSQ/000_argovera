@@ -10,7 +10,7 @@ await callOnce(() => сategoriesStore.loadCategories('', ''))
 <template>
   <ul class="сategories flex-column">
     <li v-for="category in categories" :key="category.slug">
-      <NuxtLink :to="{ name: 'category-slug', params: { slug: category.slug } }"><span>{{ category.name }}</span></NuxtLink>
+      <NuxtLink :to="{ name: 'categories-slug', params: { slug: category.slug } }"><span>{{ category.name }}</span></NuxtLink>
     </li>
   </ul>
 </template>

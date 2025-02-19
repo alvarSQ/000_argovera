@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 const productsStore = useProductsStore();
 const authStore = useAuthStore();
-const router = useRouter();
 
 const userInput: IUserLogin = reactive({
   user: {

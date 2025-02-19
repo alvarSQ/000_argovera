@@ -18,7 +18,7 @@ export const useBrandsStore = defineStore('brands', () => {
       const data = await $fetch(url);
       slug
         ? (productsByBrands.value = data as IProductsByBrands)
-        : (brands.value = data as IBrand[]);
+        : (brands.value = (data as IBrandsList).brands);      
     } catch (e) {
       console.log((e as Error).message);
     } finally {

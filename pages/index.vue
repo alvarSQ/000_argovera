@@ -23,7 +23,7 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
     </div>
     <span class="main-caption">Популярные товары</span>
     <div class="products-main">
-      <template v-for="(product, index) in products" :key="product.id">
+      <template v-for="(product, index) in products" :key="product.slug">
         <NuxtLink :to="{ name: 'products-slug', params: { slug: product.slug } }" v-if="index >= 2 && index < 22">
           <UICardProduct :image="product.image" :price="product.price" :name="product.name"
             v-if="index >= 2 && index < 22" @click="allStore.activeElement(product.categories.id)" />
@@ -38,9 +38,10 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 
 .baner-main {
   height: wmax(282);
+
   @media (max-width: 360px) {
-      display: none;
-    }
+    display: none;
+  }
 }
 
 img {
@@ -104,6 +105,10 @@ img {
     gap: 10px;
   }
 
+  @media (max-width: 440px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   @media (max-width: 360px) {
     grid-template-columns: repeat(1, 1fr);
   }
@@ -114,9 +119,10 @@ img {
   letter-spacing: 0.4px;
   font-size: wmax(26);
   color: rgb(66, 66, 66);
+
   @media (max-width: 360px) {
-      display: none;
-    }
+    display: none;
+  }
 }
 
 .content-main {

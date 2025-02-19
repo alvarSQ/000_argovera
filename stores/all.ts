@@ -61,7 +61,7 @@ export const useAllStore = defineStore('all', () => {
       ? (activeCategoryChain.value = getCategoryChain(idCategoryByProduct))
       : null;
     breadCrumbs.value.id.push(...activeCategoryChain.value);
-    breadCrumbs.value.name = nameProduct;
+    breadCrumbs.value.name = nameProduct;    
   };
 
   return {

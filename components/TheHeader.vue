@@ -5,7 +5,6 @@ const productsStore = useProductsStore();
 
 const authStore = useAuthStore();
 const { activeCategoryChain, productsCountFav } = storeToRefs(useAllStore());
-const { productsByFavorited } = storeToRefs(useProductsStore());
 const { user } = storeToRefs(useAuthStore());
 
 const { y: scrollY } = useWindowScroll();
@@ -15,7 +14,7 @@ const screenWidth = useScreenWidth();
 const isHeader = computed(() => (scrollY.value < 30 && screenWidth.value > 1210 ? false : true) );
 
 const isModal = ref(false)
-const isInnerModal = ref(true);
+// const isInnerModal = ref(false);
 
 const isFavorited = () => {
   if (user.value.username) navigateTo({ name: 'products-favorited' })
@@ -33,10 +32,21 @@ const closeModal = () => {
   // Закрытие модального окна
 };
 
+const isInnerModal = ref(false);
 
+const closeInnerModal = () => {
+  isInnerModal.value = false; // Закрываем модальное окно
+};
+
+// Обработчик клика по логотипу
+const toggleInnerModal = () => {
+  isInnerModal.value = !isInnerModal.value;
+};
 
 await callOnce('userByCookie', () => authStore.authUser('user'))
 await callOnce(() => productsStore.favoritedProducts(0))
+
+// onMounted(() =>{})
 </script>
 
 <template>
@@ -50,7 +60,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
         </div>
         <div class="navbar-content">
           <div class="flex-line">
-            <div class="line-three green dn-logo">
+            <div class="line-three green dn-logo" @click="toggleInnerModal">
               <div></div>
               <div></div>
               <div></div>
@@ -60,7 +70,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
                 <div class="logo">АРГО</div>
               </NuxtLink>
             </div>
-            <NuxtLink to="/category/bad-i-produkty-funkcionalnogo-pitaniya">
+            <NuxtLink to="/categories/bad-i-produkty-funkcionalnogo-pitaniya">
               <div class="btn catalog-btn dn" @click="activeCategoryChain = []">
                 <div class="line-three">
                   <div></div>
@@ -97,12 +107,13 @@ await callOnce(() => productsStore.favoritedProducts(0))
             </div>
           </div>
         </div>
-        <UIMenuBottom v-if="!isHeader" :inviz="true"/>
+        <UIMenuBottom v-if="!isHeader" :inviz="true" />
       </div>
     </div>
   </header>
   <AuthModal v-if="isModal" @close-modal="closeModal" />
-  <UIInnerModal :class="0 ? 'transform-open' : 'transform-close'" @close-modal="closeModal" />
+  <UIInnerModal :class="isInnerModal ? 'transform-open' : 'transform-close'" :isInnerModal="isInnerModal"
+    @closeInnerModal="closeInnerModal" />
 </template>
 
 <style lang="scss" scoped>
@@ -162,6 +173,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
 
 .green {
   margin-right: 10px;
+  cursor: pointer;
   div {
     background-color: $primary-color;
 

@@ -4,12 +4,12 @@ import { useСategoriesStore } from '@/stores/categories';
 const { breadCrumbs, activeCategoryChain } = storeToRefs(useAllStore());
 const { categoriesTree } = storeToRefs(useСategoriesStore());
 
-const idToName = computed(() => { 
+const idToName = computed(() => {
   let arrBreadCrumbs: Array<string | undefined> = [];
 
   breadCrumbs.value.id.forEach(e => arrBreadCrumbs.push(findCategoryById(e)?.name));
 
-  if (breadCrumbs.value.name) arrBreadCrumbs.push(breadCrumbs.value.name);  
+  if (breadCrumbs.value.name) arrBreadCrumbs.push(breadCrumbs.value.name);
 
   return arrBreadCrumbs;
 })
@@ -54,7 +54,7 @@ const findCategoryById = (id: number): ICategoriesInBreadCrumbs | undefined => {
     <NuxtLink to="/"><span>Home</span></NuxtLink>
     <span v-for="(breadCrumb, index) in idToName" :key="index" @click="activeCategoryChain.splice(index + 1)">
       <template v-if="index < slugForLink.length">
-        / <NuxtLink :to="{ name: 'category-slug', params: { slug: slugForLink[index] } }"> {{ breadCrumb }}
+        / <NuxtLink :to="{ name: 'categories-slug', params: { slug: slugForLink[index] } }"> {{ breadCrumb }}
         </NuxtLink>
       </template>
       <template v-else>
@@ -70,11 +70,19 @@ const findCategoryById = (id: number): ICategoriesInBreadCrumbs | undefined => {
 .bread-crumbs {
   grid-column: span 3 / span 3;
   color: gray;
-  font-size: wmax(15);
+  font-size: 15px;
   cursor: pointer;
 
   &:last-child {
     cursor: auto;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 13px;
+  }
+
+  @media (max-width: 360px) {
+    display: none;
   }
 }
 </style>

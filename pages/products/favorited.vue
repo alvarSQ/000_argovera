@@ -61,10 +61,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <span class="title" style="font-weight: 400"><span style="font-weight: 900">{{ user.username }}</span>, в вашем избранном:
+    <span class="title" style="font-weight: 400"><span style="font-weight: 900">{{ user.username }}</span>, в вашем
+        избранном:
         {{ formatProductsCount(productsCountFav) }}</span>
     <div class="products-list">
-        <template v-for="product in productsByFavorited" :key="product.id">
+        <template v-for="product in productsByFavorited" :key="product.slug">
             <UICardProduct :image="product.image" :price="product.price" :name="product.name"
                 @click="navigateTo({ name: 'products-slug', params: { slug: product.slug } })" />
         </template>

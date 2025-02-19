@@ -6,17 +6,39 @@ const props = defineProps<{
 
 <template>
     <ul class="menu-bottom" :class="[inviz ? 'navbar-content' : 'inner']">
-        <li>подобрать препарат</li>
-        <li>НОВОСТИ</li>
-        <li>СТАТЬИ</li>
-        <li>ПРАЙС-ЛИСТ</li>
-        <li>Категории</li>
-        <li>ОПЛАТА И ДОСТАВКА</li>
-        <li>СКИДКИ</li>
-        <li>КОНТАКТЫ</li>
-        <li>О КОМПАНИИ АРГО</li>
-        <li class="line" v-if="!inviz">Избранное</li>
-        <li v-if="!inviz">Личный кабинет</li>
+        <li>
+            <NuxtLink to="/">подобрать препарат</NuxtLink>
+        </li>
+        <li>
+            <NuxtLink to="/">НОВОСТИ</NuxtLink>
+        </li>
+        <li>
+            <NuxtLink to="/">СТАТЬИ</NuxtLink>
+        </li>
+        <li>
+            <NuxtLink to="/">ПРАЙС-ЛИСТ</NuxtLink>
+        </li>
+        <li>
+            <NuxtLink to="/">Категории</NuxtLink>
+        </li>
+        <li>
+            <NuxtLink to="/">ОПЛАТА И ДОСТАВКА</NuxtLink>
+        </li>
+        <li>
+            <NuxtLink to="/">СКИДКИ</NuxtLink>
+        </li>
+        <li>
+            <NuxtLink to="/">КОНТАКТЫ</NuxtLink>
+        </li>
+        <li>
+            <NuxtLink to="/">О КОМПАНИИ АРГО</NuxtLink>
+        </li>
+        <li class="line" v-if="!inviz">
+            <NuxtLink to="/products/favorited">Избранное</NuxtLink>
+        </li>
+        <li v-if="!inviz">
+            <NuxtLink to="/">Личный кабинет</NuxtLink>
+        </li>
     </ul>
 </template>
 
@@ -29,7 +51,6 @@ const props = defineProps<{
     text-transform: uppercase;
     margin-top: 20px;
     white-space: nowrap;
-    cursor: pointer;
 }
 
 .inner {

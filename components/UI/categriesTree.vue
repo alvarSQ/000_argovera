@@ -34,7 +34,7 @@ const isParentOfActive = computed(() => {
   <li class="category">
     <!-- Заголовок категории -->
     <div :class="{ 'category-open': isOpen || isParentOfActive }" @click="toggleChildren(category.id)">
-      <NuxtLink :to="{ name: 'category-slug', params: { slug: category.slug } }">{{ category.name }}</NuxtLink>
+      <NuxtLink :to="{ name: 'categories-slug', params: { slug: category.slug } }">{{ category.name }}</NuxtLink>
       <!-- Иконка для переключения видимости дочерних категорий -->
       <span v-if="category.children && category.children.length > 0" class="toggle-children">
         {{ isOpen || isParentOfActive ? '-' : '+' }}
@@ -43,7 +43,7 @@ const isParentOfActive = computed(() => {
 
     <!-- Дочерние категории -->
     <ul v-if="category.children && category.children.length > 0 && (isOpen || isParentOfActive)" class="children">
-      <UICategriesTree v-for="child in category.children" :key="child.id" :category="child" />
+      <UICategriesTree v-for="child in category.children" :key="child.slug" :category="child" />
     </ul>
   </li>
 </template>

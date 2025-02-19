@@ -120,6 +120,13 @@ const dataFromString = (dateStr: string) => {
     background-color: #0796071e;
     border-radius: 10px 10px 0 0;
   }
+    @media (max-width: 1210px) {
+      font-size: 16px;
+    }
+  
+    @media (max-width: 360px) {
+      font-size: 14px;
+    }
 }
 
 .descript-activ {

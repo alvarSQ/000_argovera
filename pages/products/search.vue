@@ -79,7 +79,7 @@ onUnmounted(() => {
     найдено:
     {{ formatProductsCount(productsCountSerch) }}</span>
   <div class="products-list">
-    <template v-for="product in productsBySearch" :key="product.id">
+    <template v-for="product in productsBySearch" :key="product.slug">
       <UICardProduct :image="product.image" :price="product.price" :name="product.name"
         @click="navigateTo({ name: 'products-slug', params: { slug: product.slug } })" />
     </template>

@@ -16,9 +16,11 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
     <div class="div4">
       <div class="title">Категории</div>
       <ul class="flex-column">
-        <UICategriesTree v-for="category in categoriesTree" :key="category.id" :category="category" />
+        <UICategriesTree v-for="category in categoriesTree" :key="category.slug" :category="category" />
       </ul>
-      <div class="title">Производители</div>
+      <div class="title">
+        <NuxtLink :to="{ name: 'brands-list' }">Производители</NuxtLink>
+      </div>
     </div>
     <div class="div2">
       <slot>
@@ -39,21 +41,27 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 
 .parent {
   display: grid;
-  grid-template-columns: 0.5fr 2fr;
   gap: 8px;
+  grid-template-areas: "a a a" "b c c";
+
+  @media (max-width: 1210px) {
+    grid-template-areas: "a a a" "c c c";
+  }
 }
 
 .div1 {
-  grid-column: span 3 / span 3;
+  grid-area: a;
 }
 
 .div4 {
-  grid-row-start: 2;
+  grid-area: b;
   width: 250px;
+  @media (max-width: 1210px) {
+      display: none;
+    }
 }
 
-.div5 {
-  grid-column: span 2 / span 2;
-  grid-row-start: 2;
+.div2 {
+  grid-area: c;
 }
 </style>

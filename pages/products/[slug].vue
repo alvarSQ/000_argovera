@@ -99,7 +99,6 @@ onMounted(async () => {
     <div class="div6">
       <UIDescriptReview />
     </div>
-    <div class="div7"></div>
   </div>
 </template>
 
@@ -150,63 +149,91 @@ onMounted(async () => {
 
 .parent {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
   gap: 8px;
+  grid-template-columns: 1fr 340px;
+  grid-template-areas: "a a" "b c" "d d";
+
+  @media (max-width: 1210px) {
+    grid-template-columns: 1fr 300px;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-template-areas: "a " "b" "c" "d";
+  }
 }
 
-.div2 {
-  grid-row: span 4 / span 4;
-  grid-row-start: 2;
-  // background-color: #0796071e;
-}
+
 
 .div3 {
-  grid-column: span 2 / span 2;
+  grid-area: a;
+  width: 100%;
 }
 
 .div4 {
+  grid-area: b;
+  width: 100%;
+  justify-self: stretch;
   padding: 20px;
-  grid-row-start: 2;
 }
 
 .div5 {
+  grid-area: c;
+  max-width: 340px;
   display: flex;
   flex-direction: column;
   gap: 30px;
-  grid-row-start: 2;
   padding: 10px;
+
+  @media (max-width: 768px) {
+    gap: 15px;
+  }
 }
 
 .title-main {
   font-size: wmax(32);
   font-weight: 700;
   color: $primary-color;
+
+  @media (max-width: 1210px) {
+    font-size: 24px;
+  }
+
+  @media (max-width: 360px) {
+    font-size: 18px;
+  }
 }
 
 .price {
   font-size: wmax(54);
   font-weight: 400;
   color: #007800;
+
+  @media (max-width: 1210px) {
+    font-size: 24px;
+  }
 }
+
 
 .price-discont {
   font-size: wmax(24);
   font-weight: 400;
   text-decoration: line-through;
   color: gray;
+
+  @media (max-width: 1210px) {
+    font-size: 18px;
+  }
 }
 
 .gray {
-  font-size: wmax(16);
+  font-size: 16px;
   color: #999;
+
 }
 
 .div6 {
-  grid-column: span 2 / span 2;
-}
-
-.div7 {
-  grid-column: span 2 / span 2;
-  grid-row-start: 4;
+  grid-area: d;
+  width: 100%;
 }
 </style>

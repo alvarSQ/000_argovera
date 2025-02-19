@@ -50,15 +50,15 @@ const props = defineProps<{
     line-clamp: 1;
   }
 
-  @media (max-width: 615px) and (min-width: 515px) {
+  @media (max-width: 760px) {
     -webkit-line-clamp: 1;
     line-clamp: 1;
   }
 
-    @media (max-width: 360px) {
-      -webkit-line-clamp: 3;
-      line-clamp: 3;
-    }
+  @media (max-width: 360px) {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
 }
 
 .price {
@@ -68,7 +68,7 @@ const props = defineProps<{
   color: $primary-color;
 
   @media (max-width: 1095px) {
-    font-size: wmax(32);
+    font-size: 14px;
   }
 
   @media (max-width: 360px) {
@@ -103,6 +103,7 @@ const props = defineProps<{
 
   @media (max-width: 1095px) {
     height: wmax(420);
+    gap: 10px;
   }
 
   @media (max-width: 900px) {
@@ -113,8 +114,12 @@ const props = defineProps<{
     gap: 5px;
   }
 
+  @media (max-width: 440px) {
+    height: 170px;
+  }
+
   @media (max-width: 360px) {
-    height: wmax(1600);
+    height: 220px;
   }
 
 
@@ -123,5 +128,26 @@ const props = defineProps<{
 .card-category {
   height: wmax(250);
   gap: 30px;
+  @media (max-width: 1095px) {
+      gap: 20px;
+    }
+  
+    @media (max-width: 900px) {
+      height: wmax(450);
+    }
+  
+    @media (max-width: 515px) {
+      gap: 5px;
+    }
+  
+    @media (max-width: 440px) {
+      height: 100px;
+    }
+  
+    @media (max-width: 360px) {
+      height: 130px;
+    }
 }
+
+
 </style>
