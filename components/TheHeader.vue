@@ -11,7 +11,9 @@ const { y: scrollY } = useWindowScroll();
 
 const screenWidth = useScreenWidth();
 
-const isHeader = computed(() => (scrollY.value < 30 && screenWidth.value > 1210 ? false : true) );
+const isHeader = computed(() => (scrollY.value < 30 && screenWidth.value > 1210 ? false : true));
+
+// const isInner = computed(() => (screenWidth.value > 1210 ? false : true))
 
 const isModal = ref(false)
 // const isInnerModal = ref(false);
@@ -35,7 +37,8 @@ const closeModal = () => {
 const isInnerModal = ref(false);
 
 const closeInnerModal = () => {
-  isInnerModal.value = false; // Закрываем модальное окно
+  isInnerModal.value = false
+  // isInner.value ? isInnerModal.value = true : undefined; // Закрываем модальное окно
 };
 
 // Обработчик клика по логотипу

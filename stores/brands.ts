@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 
-// const URL = 'https://argovera.onrender.com/brands/';
+const URL = 'https://argovera.onrender.com/brands/';
 
-const URL = 'http://localhost:10000/brands/';
+// const URL = 'http://localhost:10000/brands/';
 
 export const useBrandsStore = defineStore('brands', () => {
   const brands = ref([] as IBrand[]);

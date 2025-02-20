@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 
-// const URL = 'https://argovera.onrender.com/categories/';
+const URL = 'https://argovera.onrender.com/categories/';
 
-const URL = 'http://localhost:10000/categories/';
+// const URL = 'http://localhost:10000/categories/';
 
 export const useСategoriesStore = defineStore('categories', () => {
   const categories = ref([] as ICategories[]);

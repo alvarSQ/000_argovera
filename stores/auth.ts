@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import consola from 'consola';
 
-// const URL = 'https://argovera.onrender.com/users/';
+const URL = 'https://argovera.onrender.com';
 
-const URL = 'http://localhost:10000';
+// const URL = 'http://localhost:10000';
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref({} as IUserInfo);

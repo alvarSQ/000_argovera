@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
 import consola from 'consola';
 
-// const URL = 'https://argovera.onrender.com/products/';
+const URL = 'https://argovera.onrender.com/products';
 
-const URL = 'http://localhost:10000/products';
+// const URL = 'http://localhost:10000/products';
 
 export const useProductsStore = defineStore('products', () => {
   const products = ref([] as IProduct[]);
