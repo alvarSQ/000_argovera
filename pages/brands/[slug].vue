@@ -26,7 +26,7 @@ const {} = await useAsyncData(
 </script>
 
 <template>
-  <span class="title">{{ productsByBrands.brand.name }}</span>
+  <span class="title"  v-if="!isLoading">{{ productsByBrands.brand.name }}</span>
   <UIPreloader v-if="isLoading" />
   <div class="products-list" v-else>
     <template v-for="product in productsByBrands.products" :key="product.id">

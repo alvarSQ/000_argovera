@@ -39,7 +39,7 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 .baner-main {
   height: wmax(282);
 
-  @media (max-width: 360px) {
+  @media (max-width: 480px) {
     display: none;
   }
 }
@@ -120,7 +120,7 @@ img {
   font-size: wmax(26);
   color: rgb(66, 66, 66);
 
-  @media (max-width: 360px) {
+  @media (max-width: 480px) {
     display: none;
   }
 }

@@ -41,14 +41,14 @@ const emit = defineEmits(['closeModal']);
       <div>
         <label class="text-field__label" for="login">E-mail</label>
 
-        <input class="text-field__input" type="text" name="login" id="login" placeholder="Введите ваш e-mail"
+        <input class="text-field__input" type="text" name="login" id="login" placeholder="foo2@gmail.com"
           v-model="userInput.user.email" />
       </div>
 
       <div>
         <label class="text-field__label" for="password">Пароль</label>
 
-        <input class="text-field__input" type="password" name="password" id="password" placeholder="Введите ваш пароль"
+        <input class="text-field__input" type="password" name="password" id="password" placeholder="123"
           v-model="userInput.user.password" autocomplete="on" />
       </div>
       <div class="flex-line">

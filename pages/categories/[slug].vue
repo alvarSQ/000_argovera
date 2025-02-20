@@ -21,7 +21,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <span class="title">{{ productsByCategory.category.name }}</span>
+  <span class="title" v-if="!isLoading">{{ productsByCategory.category.name }}</span>
   <UIPreloader v-if="isLoading" />
   <div class="products-list" v-else>
     <template v-for="children in productsByCategory.category.children" :key="children.slug">

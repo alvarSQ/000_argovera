@@ -180,7 +180,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
   div {
     background-color: $primary-color;
 
-    @media (max-width: 360px) {
+    @media (max-width: 480px) {
       background-color: $default-color;
     }
   }
@@ -224,7 +224,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
   padding-top: 8px;
   cursor: pointer;
 
-  @media (max-width: 360px) {
+  @media (max-width: 480px) {
     color: $default-color;
   }
 }
