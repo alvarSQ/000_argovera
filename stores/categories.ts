@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia';
 
-const URL = 'https://argovera.onrender.com/categories/';
-
-// const URL = 'http://localhost:10000/categories/';
-
 export const useСategoriesStore = defineStore('categories', () => {
+  const config = useRuntimeConfig();
+  const URL = `${config.public.URL_BACK}/categories/`;
+
   const categories = ref([] as ICategories[]);
 
   const categoriesTree = ref([] as ICategoriesTree[]);
@@ -23,7 +22,7 @@ export const useСategoriesStore = defineStore('categories', () => {
     try {
       const data = await $fetch(url);
       if (tree) categoriesTree.value = data as ICategoriesTree[];
-      if (slug) productsByCategory.value = (data as IProductsByCategory);       
+      if (slug) productsByCategory.value = data as IProductsByCategory;      
     } catch (e) {
       console.log((e as Error).message);
     } finally {

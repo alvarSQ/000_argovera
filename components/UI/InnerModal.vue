@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useСategoriesStore } from '@/stores/categories';
+const сategoriesStore = useСategoriesStore();
 
 const { categoriesTree } = storeToRefs(useСategoriesStore());
 
@@ -32,6 +33,8 @@ watch(
   }
 );
 
+await callOnce(() => сategoriesStore.loadCategories('tree', ''));
+
 // Убедимся, что обработчик удаляется при размонтировании компонента
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
@@ -42,25 +45,15 @@ onUnmounted(() => {
   <div class="item_main inner-modal" ref="modal">
     <div class=" title">Категории</div>
     <ul class="flex-column">
-      <UICategriesTree v-for="category in categoriesTree" :key="category.slug" :category="category" />
+      <UICategoriesTree v-for="category in categoriesTree" :key="category.slug" :category="category" />
     </ul>
     <UIMenuBottom :inviz="false" />
   </div>
-  <!-- <div class="modal-overlay" @click="$emit('closeInnerModal')"></div> -->
 </template>
 
 <style scoped lang="scss">
 @use '@/assets/scss/utils/vars.scss' as *;
 @use "sass:color";
-
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 8;
-}
 
 .title {
   font-size: 20px;

@@ -1,7 +1,13 @@
 <script setup lang="ts">
+const { user } = storeToRefs(useAuthStore());
+
 const props = defineProps<{
     inviz: boolean,
 }>();
+
+const isFavorited = () => {
+    if (user.value.username) navigateTo({ name: 'products-favorited' })
+}
 </script>
 
 <template>
@@ -33,8 +39,8 @@ const props = defineProps<{
         <li>
             <NuxtLink to="/">О КОМПАНИИ АРГО</NuxtLink>
         </li>
-        <li class="line" v-if="!inviz">
-            <NuxtLink to="/products/favorited">Избранное</NuxtLink>
+        <li class="line" v-if="!inviz" @click="isFavorited">
+            Избранное
         </li>
         <li v-if="!inviz">
             <NuxtLink to="/">Личный кабинет</NuxtLink>
@@ -51,6 +57,7 @@ const props = defineProps<{
     text-transform: uppercase;
     margin-top: 20px;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .inner {

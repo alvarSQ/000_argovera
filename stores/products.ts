@@ -1,25 +1,23 @@
 import { defineStore } from 'pinia';
 import consola from 'consola';
 
-const URL = 'https://argovera.onrender.com/products';
-
-// const URL = 'http://localhost:10000/products';
-
 export const useProductsStore = defineStore('products', () => {
+  const config = useRuntimeConfig();
+  const URL = `${config.public.URL_BACK}/products/`;
+
   const products = ref([] as IProduct[]);
   const productBySlug = ref({} as IProduct);
   const productsBySearch = ref([] as IProduct[]);
   const productsByFavorited = ref([] as IProduct[]);
-  
 
   const loadProduct = async (slug = '') => {
     const { isLoading } = storeToRefs(useAllStore());
-    const { token } = storeToRefs(useAuthStore());    
-    isLoading.value = true;     
+    const { token } = storeToRefs(useAuthStore());
+    isLoading.value = true;
     try {
-      const data: any = await $fetch(`${URL}/${slug}`, {
-        headers: { Authorization: `${token.value}` }
-      });        
+      const data: any = await $fetch(`${URL}${slug}`, {
+        headers: { Authorization: `${token.value}` },
+      });
       slug
         ? (productBySlug.value = data.product as IProduct)
         : (products.value = (data as IProductsList).products);
@@ -33,15 +31,15 @@ export const useProductsStore = defineStore('products', () => {
   const inFavorite = async (slug: string) => {
     const { isLoading } = storeToRefs(useAllStore());
     const { token } = storeToRefs(useAuthStore());
-    isLoading.value = true;   
+    isLoading.value = true;
     let metodSet = 'POST' as 'POST' | 'DELETE';
-    productBySlug.value.favorited ? (metodSet = 'DELETE') : metodSet
+    productBySlug.value.favorited ? (metodSet = 'DELETE') : metodSet;
     try {
-      const data = await $fetch(`${URL}/${slug}/favorite`, {
+      const data = await $fetch(`${URL}${slug}/favorite`, {
         method: metodSet,
         headers: { Authorization: `${token.value}` },
-      });      
-      productBySlug.value = (data as IProductBySlug).product;      
+      });
+      productBySlug.value = (data as IProductBySlug).product;
     } catch (e) {
       consola.error('Произошла ошибка:', e);
     } finally {
@@ -52,7 +50,7 @@ export const useProductsStore = defineStore('products', () => {
   const searchProducts = async (offset: number, q: string) => {
     const { isLoading, limitScroll, productsCountSerch } =
       storeToRefs(useAllStore());
-    isLoading.value = true; 
+    isLoading.value = true;
     try {
       const data = await $fetch(`${URL}/search`, {
         params: { q, limit: limitScroll.value, offset },
@@ -72,7 +70,7 @@ export const useProductsStore = defineStore('products', () => {
   const favoritedProducts = async (offset: number) => {
     const { isLoading, limitScroll, productsCountFav } =
       storeToRefs(useAllStore());
-    const { user, token } = storeToRefs(useAuthStore()); 
+    const { user, token } = storeToRefs(useAuthStore());
     isLoading.value = true;
     try {
       if (user.value.username) {
@@ -96,7 +94,6 @@ export const useProductsStore = defineStore('products', () => {
       isLoading.value = false;
     }
   };
-
 
   return {
     products,

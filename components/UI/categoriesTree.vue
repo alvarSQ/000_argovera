@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useAllStore } from '@/stores/all';
 import { storeToRefs } from 'pinia';
+import { useСategoriesStore } from '~/stores/categories';
+
+const сategoriesStore = useСategoriesStore();
 
 const allStore = useAllStore();
 const { activeCategoryChain } = storeToRefs(useAllStore());
@@ -28,6 +31,8 @@ const isOpen = computed(() => activeCategoryChain.value.includes(props.category.
 const isParentOfActive = computed(() => {
   return props.category.children?.some(child => activeCategoryChain.value.includes(child.id));
 });
+
+await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 </script>
 
 <template>
@@ -43,7 +48,7 @@ const isParentOfActive = computed(() => {
 
     <!-- Дочерние категории -->
     <ul v-if="category.children && category.children.length > 0 && (isOpen || isParentOfActive)" class="children">
-      <UICategriesTree v-for="child in category.children" :key="child.slug" :category="child" />
+      <UICategoriesTree v-for="child in category.children" :key="child.slug" :category="child" />
     </ul>
   </li>
 </template>

@@ -1,11 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      URL_BACK: process.env.NUXT_PUBLIC_URL_BACK || 'http://localhost:10000',
+    },
+  },
   app: {
     head: {
       htmlAttrs: {
-        lang: 'ru'
-      }
-    }
+        lang: 'ru',
+      },
+    },
   },
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },
@@ -25,10 +30,5 @@ export default defineNuxtConfig({
       },
     },
   },
-  modules: [
-    '@pinia/nuxt',
-    'nuxt-typed-router',
-    '@vueuse/nuxt',
-    '@nuxt/image'
-  ],
+  modules: ['@pinia/nuxt', 'nuxt-typed-router', '@vueuse/nuxt', '@nuxt/image'],
 });

@@ -2,7 +2,6 @@
 import { useСategoriesStore } from '@/stores/categories';
 
 const allStore = useAllStore();
-const сategoriesStore = useСategoriesStore();
 
 const productsStore = useProductsStore();
 const { products } = storeToRefs(useProductsStore());
@@ -12,8 +11,6 @@ definePageMeta({
 })
 
 await callOnce(() => productsStore.loadProduct())
-
-await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 </script>
 
 <template>

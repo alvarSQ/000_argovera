@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useСategoriesStore } from '@/stores/categories';
 
-const allStore = useAllStore();
 const сategoriesStore = useСategoriesStore();
 const { categoriesTree } = storeToRefs(useСategoriesStore());
 
@@ -16,7 +15,7 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
     <div class="div4">
       <div class="title">Категории</div>
       <ul class="flex-column">
-        <UICategriesTree v-for="category in categoriesTree" :key="category.slug" :category="category" />
+        <UICategoriesTree v-for="category in categoriesTree" :key="category.slug" :category="category" />
       </ul>
       <div class="title">
         <NuxtLink :to="{ name: 'brands-list' }">Производители</NuxtLink>

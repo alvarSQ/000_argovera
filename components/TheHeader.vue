@@ -11,12 +11,11 @@ const { y: scrollY } = useWindowScroll();
 
 const screenWidth = useScreenWidth();
 
-const isHeader = computed(() => (scrollY.value < 30 && screenWidth.value > 1210 ? false : true));
+const isHeader = computed(() => (scrollY.value < 30 && screenWidth.value < 1210));
 
-// const isInner = computed(() => (screenWidth.value > 1210 ? false : true))
+const isInner = computed(() => (screenWidth.value < 1210))
 
 const isModal = ref(false)
-// const isInnerModal = ref(false);
 
 const isFavorited = () => {
   if (user.value.username) navigateTo({ name: 'products-favorited' })
@@ -49,7 +48,10 @@ const toggleInnerModal = () => {
 await callOnce('userByCookie', () => authStore.authUser('user'))
 await callOnce(() => productsStore.favoritedProducts(0))
 
-// onMounted(() =>{})
+onMounted(() => {
+  // console.log(isInner.value);
+  
+})
 </script>
 
 <template>
@@ -116,7 +118,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
   </header>
   <AuthModal v-if="isModal" @close-modal="closeModal" />
   <UIInnerModal :class="isInnerModal ? 'transform-open' : 'transform-close'" :isInnerModal="isInnerModal"
-    @closeInnerModal="closeInnerModal" />
+    @closeInnerModal="closeInnerModal" v-if="isInner" />
 </template>
 
 <style lang="scss" scoped>
