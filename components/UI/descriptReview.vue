@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useDateFormat } from '@vueuse/core';
-const { productBySlug } = storeToRefs(useProductsStore());
 const { isLoading } = storeToRefs(useAllStore());
+
+const props = defineProps<{
+  product: IProduct;
+}>();
 
 const descriptTitles = ref([
   {
@@ -46,21 +49,15 @@ const dataFromString = (dateStr: string) => {
 <template>
   <div class="descript">
     <ul class="descript-titles flex-line">
-      <li
-        :class="{ 'descript-activ': descriptTitle.activ }"
-        v-for="descriptTitle in descriptTitles"
-        :key="descriptTitle.title"
-        @click="descriptTitleActiv(descriptTitle.title)"
-      >
+      <li :class="{ 'descript-activ': descriptTitle.activ }" v-for="descriptTitle in descriptTitles"
+        :key="descriptTitle.title" @click="descriptTitleActiv(descriptTitle.title)">
         {{ descriptTitle.title }}
       </li>
     </ul>
     <div class="descript-contener">
-      <p
-        v-if="descriptActiv"
-        v-html="productBySlug.description"
-        :key="productBySlug.slug"
-      ></p>
+      <ClientOnly v-if="descriptActiv">
+        <p  v-html="product.description" :key="product.slug"></p>
+      </ClientOnly>
       <div class="reviews" v-else>
         <ul class="reviews-left flex-column">
           <!-- <li
@@ -82,6 +79,7 @@ const dataFromString = (dateStr: string) => {
           <UIWriteReview />
         </div>
       </div>
+
     </div>
   </div>
 </template>

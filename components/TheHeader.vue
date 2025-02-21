@@ -5,13 +5,13 @@ const productsStore = useProductsStore();
 
 const authStore = useAuthStore();
 const { activeCategoryChain, productsCountFav } = storeToRefs(useAllStore());
-const { user } = storeToRefs(useAuthStore());
+const { user  } = storeToRefs(useAuthStore());
 
 const { y: scrollY } = useWindowScroll();
 
 const screenWidth = useScreenWidth();
 
-const isHeader = computed(() => (scrollY.value < 30 && screenWidth.value < 1210));
+const isHeader = computed(() => scrollY.value > 30);
 
 const isInner = computed(() => (screenWidth.value < 1210))
 
@@ -45,13 +45,14 @@ const toggleInnerModal = () => {
   isInnerModal.value = !isInnerModal.value;
 };
 
+
 await callOnce('userByCookie', () => authStore.authUser('user'))
 await callOnce(() => productsStore.favoritedProducts(0))
 
-onMounted(() => {
-  // console.log(isInner.value);
+// onMounted(() => {
+//   console.log(scrollY.value);
   
-})
+// })
 </script>
 
 <template>
@@ -60,7 +61,7 @@ onMounted(() => {
       <div class="container">
         <div class="navbar-content menu-top dn" v-show="!isHeader">
           <span>Пермь, ул. Луначарского, 90</span>
-          <div class="register" v-if="user.username">{{ user.username }}</div>
+          <div class="register" v-if="user.username" @click="authStore.logUserOut">{{ user.username }}</div>
           <div class="register" @click="openModal" v-else>Вход | Регистрация</div>
         </div>
         <div class="navbar-content">
@@ -112,7 +113,7 @@ onMounted(() => {
             </div>
           </div>
         </div>
-        <UIMenuBottom v-if="!isHeader" :inviz="true" />
+        <UIMenuBottom v-if="!isInner && !isHeader" :inviz="true" />
       </div>
     </div>
   </header>

@@ -17,10 +17,16 @@ export const useProductsStore = defineStore('products', () => {
     try {
       const data: any = await $fetch(`${URL}${slug}`, {
         headers: { Authorization: `${token.value}` },
+        query: {
+          limit: 10,
+          offset: 2
+        },
       });
-      slug
-        ? (productBySlug.value = data.product as IProduct)
-        : (products.value = (data as IProductsList).products);
+      if (slug) {
+        return productBySlug.value = data.product as IProduct;
+      } else {
+        return products.value = (data as IProductsList).products;
+      }
     } catch (e) {
       consola.error('Произошла ошибка:', e);
     } finally {
@@ -52,7 +58,7 @@ export const useProductsStore = defineStore('products', () => {
       storeToRefs(useAllStore());
     isLoading.value = true;
     try {
-      const data = await $fetch(`${URL}/search`, {
+      const data = await $fetch(`${URL}search`, {
         params: { q, limit: limitScroll.value, offset },
       });
       if (offset === 0) {

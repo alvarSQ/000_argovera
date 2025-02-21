@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia';
 import consola from 'consola';
 
-const URL = 'https://argovera.onrender.com';
-
-// const URL = 'http://localhost:10000';
-
 export const useAuthStore = defineStore('auth', () => {
+  const config = useRuntimeConfig();
+  const URL = config.public.URL_BACK;
+
   const user = ref({} as IUserInfo);
 
   const token = useCookie('token');
@@ -26,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
       urlPlus = '/user';
       metodSet = 'GET';
       headersSet = { Authorization: `${token.value}` };
-    }    
+    }
     try {
       const data = await $fetch(`${URL}${urlPlus}`, {
         method: metodSet,
@@ -40,22 +39,14 @@ export const useAuthStore = defineStore('auth', () => {
     }
   };
 
-    const inFavorite = async (slug: string) => {   
-      try {
-        const data = await $fetch(`${URL}/${slug}/favorite`, {
-          method: 'POST',
-          headers: { Authorization: `${token.value}` }
-        });
-        token.value = (data as IUser).user.token;
-        user.value = (data as IUser).user;
-      } catch (e) {
-        consola.error('Произошла ошибка:', e);
-      }
-    };
-
   const logUserOut = () => {
-    token.value = '';
-    navigateTo('/');
+    const { productsCountFav } = storeToRefs(useAllStore());
+
+    const tokenCookie = useCookie('token', { expires: new Date(0) });
+    tokenCookie.value = null;
+
+    user.value = {} as IUserInfo;
+    productsCountFav.value = 0;
   };
 
   return { user, token, authUser, logUserOut };

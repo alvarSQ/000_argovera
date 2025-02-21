@@ -41,6 +41,7 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 .parent {
   display: grid;
   gap: 8px;
+  grid-template-columns: 260px;
   grid-template-areas: "a a a" "b c c";
 
   @media (max-width: 1210px) {
@@ -54,7 +55,7 @@ await callOnce(() => сategoriesStore.loadCategories('tree', ''));
 
 .div4 {
   grid-area: b;
-  width: 250px;
+  padding-right: 10px;
   @media (max-width: 1210px) {
       display: none;
     }

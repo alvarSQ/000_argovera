@@ -25,23 +25,17 @@ const countMinus = () => (int.value <= 1 ? int.value : --int.value);
 
 const isFavorite = ref(false);
 
-const { refresh } = await useAsyncData('product', async () => {
-  return await productsStore.loadProduct(slug.value);
-});
+await callOnce(() => productsStore.loadProduct(slug.value));
 
 watch(
   () => token.value,
-  () => refresh()
+  (newValue, oldValue) => productsStore.loadProduct(slug.value)
 );
 
 watch(
   () => productBySlug.value.favorited,
   () => productsStore.favoritedProducts(0)
 );
-
-const pending = computed(() => {
-  return isLoading.value === true && productBySlug.value.description
-})
 
 onMounted(async () => {
   allStore.getBreadCrumbs(
@@ -53,7 +47,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <UIPreloader v-if="pending" />
+  <UIPreloader v-if="isLoading" />
   <div class="parent" v-else>
     <div class="div3 title">{{ productBySlug.name }}</div>
     <div class="div4 center">
@@ -94,11 +88,11 @@ onMounted(async () => {
       <div class="btn one-click">Купить в один клик</div>
     </div>
     <div class="div6">
-      <UIDescriptReview :product="productBySlug" />
+      <UIDescriptReview />
     </div>
   </div>
 
-
+  
 </template>
 
 <style lang="scss" scoped>
