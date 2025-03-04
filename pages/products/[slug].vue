@@ -3,47 +3,84 @@ const route = useRoute('products-slug');
 
 const productsStore = useProductsStore();
 const allStore = useAllStore();
+const cartStore = useCartStore();
 
 const { productBySlug } = storeToRefs(useProductsStore());
 const { isLoading } = storeToRefs(useAllStore());
 const { token } = storeToRefs(useAuthStore());
+const { cart } = storeToRefs(useCartStore());
 
 const slug = computed(() => route.params.slug);
-// const hasProduct = computed(() => productBySlug.value.name && isLoading.value);
-const discont = computed(
-  () =>
-    (productBySlug.value.price +
-      (productBySlug.value.price * productBySlug.value.discountPercentage) /
-      100) *
-    int.value
+
+// Реактивный объект toCart
+const toCart = ref<IToCart>({
+  productId: productBySlug.value.id || 1, // начальное значение, если productBySlug еще не загружен
+  quantity: 1, // начальное значение
+});
+
+// Синхронизация quantity с количеством в корзине
+const syncQuantityWithCart = () => {
+  if (cart.value?.items && Array.isArray(cart.value.items)) {
+    const itemInCart = cart.value.items.find(e => e.productId === productBySlug.value.id);
+    toCart.value.quantity = itemInCart ? itemInCart.quantity : 1; // 1, если товара нет в корзине
+  } else {
+    toCart.value.quantity = 1; // начальное значение, если корзина пуста
+  }
+};
+
+// Вычисляемое свойство для цены с учетом скидки
+const discont = computed(() =>
+  (productBySlug.value.price +
+    (productBySlug.value.price * productBySlug.value.discountPercentage) / 100) *
+  toCart.value.quantity
 );
 
-const int = ref(1);
+// Функции для изменения количества
+const countPlus = () => !hasProductInCart.value ? ++toCart.value.quantity : toCart.value.quantity;
+const countMinus = () => !hasProductInCart.value ? (toCart.value.quantity <= 1 ? toCart.value.quantity : --toCart.value.quantity) : toCart.value.quantity;
 
-const countPlus = () => ++int.value;
-const countMinus = () => (int.value <= 1 ? int.value : --int.value);
-
-const isFavorite = ref(false);
-
-const { refresh } = await useAsyncData('product', async () => {
+// Загрузка данных о продукте
+const { refresh: refreshProduct } = await useAsyncData('product', async () => {
   return await productsStore.loadProduct(slug.value);
 });
 
+// Загрузка корзины
+await callOnce(() => cartStore.getCartToUser());
+
+// Добавление в корзину
+const addInCart = async () => {
+  toCart.value.productId = productBySlug.value.id; // Устанавливаем актуальный productId
+  await cartStore.addToCart('add', toCart.value);
+};
+
+// Синхронизация при изменении корзины
 watch(
-  () => token.value,
-  () => refresh()
+  () => cart.value,
+  () => syncQuantityWithCart(),
+  { immediate: true, deep: true }
 );
 
-watch(
-  () => productBySlug.value.favorited,
-  () => productsStore.favoritedProducts(0)
+// Обновление данных при изменении токена или избранного
+watch(() => token.value, async () => {  
+  refreshProduct();
+  await cartStore.getCartToUser()
+});
+watch(() => productBySlug.value.favorited, () => productsStore.favoritedProducts(0));
+
+// Состояние загрузки
+const pending = computed(() =>
+  isLoading.value === true && productBySlug.value.description
 );
 
-const pending = computed(() => {
-  return isLoading.value === true && productBySlug.value.description
-})
+// Проверка наличия товара в корзине
+const hasProductInCart = computed(() =>
+  cart.value?.items && Array.isArray(cart.value.items)
+    ? cart.value.items.some(e => e.productId === productBySlug.value.id)
+    : false
+);
 
-onMounted(async () => {
+// Установка breadcrumbs при монтировании
+onMounted(async () => {  
   allStore.getBreadCrumbs(
     0,
     productBySlug.value.name,
@@ -63,15 +100,21 @@ onMounted(async () => {
       <span class="title-main">{{ productBySlug.name }}</span>
       <div>
         <span class="price-discont">{{ Math.round(discont) }}<span>&nbsp;₽</span></span><span class="price">&nbsp;{{
-          productBySlug.price }}<span>&nbsp;₽</span></span>
+          productBySlug.price * toCart.quantity
+          }}<span>&nbsp;₽</span></span>
       </div>
       <div class="flex-line">
-        <div class="int center">{{ int }}</div>
+        <div class="int center">{{ toCart.quantity }}</div>
         <div class="arrow">
           <div class="count center" @click="countPlus">&#9650;</div>
           <div class="count center" @click="countMinus">&#9660;</div>
         </div>
-        <div class="btn">В корзину</div>
+        <div class="btn" v-if="!hasProductInCart" @click="addInCart">
+          В корзину
+        </div>
+        <div class="btn" :class="{ 'one-click': hasProductInCart }" v-else @click="">
+          В корзине
+        </div>
         <div class="int center" @click="productsStore.inFavorite(slug)">
           <svg viewBox="0.8 0.5 22 22" width="33px" height="33px" fill="currentColor" v-if="productBySlug.favorited">
             <path
@@ -97,8 +140,6 @@ onMounted(async () => {
       <UIDescriptReview :product="productBySlug" />
     </div>
   </div>
-
-
 </template>
 
 <style lang="scss" scoped>
@@ -107,17 +148,6 @@ onMounted(async () => {
 .one-click {
   color: $primary-color;
   background-color: #0796071e;
-}
-
-.int {
-  aspect-ratio: 1 / 1;
-  user-select: none;
-  height: 40px;
-  border: 2px solid $primary-color;
-  font-size: 20px;
-  color: $primary-color;
-  border-radius: 10px;
-  align-items: center;
 }
 
 .favorite {
@@ -139,18 +169,11 @@ onMounted(async () => {
   height: 100%;
 }
 
-.count {
-  user-select: none;
-  padding-right: 10px;
-  color: $primary-color;
-  cursor: pointer;
-}
-
 .parent {
   display: grid;
   gap: 8px;
   grid-template-columns: 1fr 340px;
-  grid-template-areas: "a a" "b c" "d d";
+  grid-template-areas: 'a a' 'b c' 'd d';
 
   @media (max-width: 1210px) {
     grid-template-columns: 1fr 300px;
@@ -158,11 +181,9 @@ onMounted(async () => {
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    grid-template-areas: "a " "b" "c" "d";
+    grid-template-areas: 'a ' 'b' 'c' 'd';
   }
 }
-
-
 
 .div3 {
   grid-area: a;
@@ -213,7 +234,6 @@ onMounted(async () => {
   }
 }
 
-
 .price-discont {
   font-size: wmax(24);
   font-weight: 400;
@@ -228,11 +248,21 @@ onMounted(async () => {
 .gray {
   font-size: 16px;
   color: #999;
-
 }
 
 .div6 {
   grid-area: d;
   width: 100%;
+}
+
+.int {
+  aspect-ratio: 1 / 1;
+  user-select: none;
+  height: 40px;
+  border: 2px solid $primary-color;
+  font-size: 20px;
+  color: $primary-color;
+  border-radius: 10px;
+  align-items: center;
 }
 </style>

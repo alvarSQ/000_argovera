@@ -1,12 +1,12 @@
-// export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware((to) => {
 
-//     const { accessToken } = storeToRefs(useAuthStore());
+    const { token } = storeToRefs(useAuthStore());
 
-//     if (accessToken.value && to?.name === 'login') {
-//         return navigateTo('/');
-//     }
+    if (token.value && to?.name === '/') {
+      return navigateTo('/');
+    }
     
-//     if (!accessToken.value && to?.name !== 'login') {
-//         return navigateTo('/login');
-//     }
-// });
+    if (!token.value && to?.name !== '/') {
+      return navigateTo('/');
+    }
+});

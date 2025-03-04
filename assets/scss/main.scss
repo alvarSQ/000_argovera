@@ -79,13 +79,6 @@ a {
   text-decoration: none;
 }
 
-ul,
-li {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
 footer, // also footer if footer without section
 section,
 .section {
@@ -191,4 +184,11 @@ section,
   &:hover {
     color: $primary-color;
   }
+}
+
+.count {
+  user-select: none;
+  padding-right: 10px;
+  color: $primary-color;
+  cursor: pointer;
 }

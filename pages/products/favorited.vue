@@ -1,9 +1,15 @@
 <script setup lang="ts">
 const productsStore = useProductsStore();
 
-const { breadCrumbs, searchQuery, productsCountFav, limitScroll, isLoading, activeCategoryChain } = storeToRefs(useAllStore());
+const { breadCrumbs, productsCountFav, limitScroll, isLoading, activeCategoryChain } = storeToRefs(useAllStore());
 const { productsByFavorited } = storeToRefs(useProductsStore());
 const { user } = storeToRefs(useAuthStore());
+const { token } = storeToRefs(useAuthStore());
+
+definePageMeta({
+    middleware: 'auth'
+})
+
 
 const offset = ref(0)
 
@@ -46,6 +52,8 @@ const formatProductsCount = (count: number): string => {
     return `${count} ${num_word(count)}`;
 };
 
+watch(() => token.value, () => navigateTo('/'));
+
 onMounted(() => {
     breadCrumbs.value = {
         id: [],
@@ -55,7 +63,6 @@ onMounted(() => {
     window.addEventListener('scroll', checkPosition);
 });
 onUnmounted(() => {
-    searchQuery.value = '';
     window.addEventListener('scroll', checkPosition);
 });
 </script>

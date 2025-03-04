@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 const productsStore = useProductsStore();
 const authStore = useAuthStore();
+const cartStore = useCartStore();
 
 const userInput: IUserLogin = reactive({
   user: {
@@ -18,6 +19,7 @@ const userInputAuth = async () => {
   }
   await authStore.authUser(type, userInput);
   await productsStore.favoritedProducts(0);
+  await cartStore.getCartToUser()
   emit('closeModal')
 };
 

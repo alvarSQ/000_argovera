@@ -27,6 +27,9 @@ export const useAuthStore = defineStore('auth', () => {
       headersSet = { Authorization: `${token.value}` };
     }
     try {
+      if (type === 'user' && !token.value) {
+        return;
+      }
       const data = await $fetch(`${URL}${urlPlus}`, {
         method: metodSet,
         headers: headersSet,
@@ -40,13 +43,14 @@ export const useAuthStore = defineStore('auth', () => {
   };
 
   const logUserOut = () => {
-    const { productsCountFav } = storeToRefs(useAllStore());
+    const { productsCountFav, productsCountCart } = storeToRefs(useAllStore());
 
     const tokenCookie = useCookie('token', { expires: new Date(0) });
     tokenCookie.value = null;
 
     user.value = {} as IUserInfo;
     productsCountFav.value = 0;
+    productsCountCart.value = 0;
   };
 
   return { user, token, authUser, logUserOut };

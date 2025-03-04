@@ -2,9 +2,12 @@
 import { useWindowScroll } from '@vueuse/core';
 
 const productsStore = useProductsStore();
+const cartStore = useCartStore();
 
 const authStore = useAuthStore();
-const { activeCategoryChain, productsCountFav } = storeToRefs(useAllStore());
+const allStore = useAllStore();
+
+const { activeCategoryChain, productsCountFav, isModal, productsCountCart } = storeToRefs(useAllStore());
 const { user  } = storeToRefs(useAuthStore());
 
 const { y: scrollY } = useWindowScroll();
@@ -14,24 +17,6 @@ const screenWidth = useScreenWidth();
 const isHeader = computed(() => scrollY.value > 30);
 
 const isInner = computed(() => (screenWidth.value < 1210))
-
-const isModal = ref(false)
-
-const isFavorited = () => {
-  if (user.value.username) navigateTo({ name: 'products-favorited' })
-}
-
-const openModal = () => {
-  document.body.classList.add('modal-open');
-  isModal.value = true
-  // Открытие модального окна
-};
-
-const closeModal = () => {
-  document.body.classList.remove('modal-open');
-  isModal.value = false
-  // Закрытие модального окна
-};
 
 const isInnerModal = ref(false);
 
@@ -47,12 +32,8 @@ const toggleInnerModal = () => {
 
 
 await callOnce('userByCookie', () => authStore.authUser('user'))
-await callOnce(() => productsStore.favoritedProducts(0))
-
-// onMounted(() => {
-//   console.log(scrollY.value);
-  
-// })
+await callOnce('favorited', () => productsStore.favoritedProducts(0))
+await callOnce('cart', () => cartStore.getCartToUser())
 </script>
 
 <template>
@@ -62,7 +43,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
         <div class="navbar-content menu-top dn" v-show="!isHeader">
           <span>Пермь, ул. Луначарского, 90</span>
           <div class="register" v-if="user.username" @click="authStore.logUserOut">{{ user.username }}</div>
-          <div class="register" @click="openModal" v-else>Вход | Регистрация</div>
+          <div class="register" @click="allStore.openModal" v-else>Вход | Регистрация</div>
         </div>
         <div class="navbar-content">
           <div class="flex-line">
@@ -89,7 +70,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
           </div>
           <UISearchForm />
           <div class="icon-block dn">
-            <div class="icon-one" @click="isFavorited">
+            <div class="icon-one" @click="navigateTo({ name: 'products-favorited' })">
               <div class=" icon-num" v-if="productsCountFav">{{ productsCountFav }}</div>
               <svg viewBox="0 0 22 20" width="26px" height="26px" fill="currentColor">
                 <path
@@ -98,8 +79,8 @@ await callOnce(() => productsStore.favoritedProducts(0))
               </svg>
               <span>Избранное</span>
             </div>
-            <div class="icon-one">
-              <div class="icon-num">12</div>
+            <div class="icon-one" @click="navigateTo('/cart')">
+              <div class="icon-num" v-if="productsCountCart">{{ productsCountCart }}</div>
               <svg width="26px" height="26px" viewBox="0 0 22 20" fill="currentColor"
                 xmlns="http://www.w3.org/2000/svg">
                 <path
@@ -117,7 +98,7 @@ await callOnce(() => productsStore.favoritedProducts(0))
       </div>
     </div>
   </header>
-  <AuthModal v-if="isModal" @close-modal="closeModal" />
+  <AuthModal v-if="isModal" @close-modal="allStore.closeModal" />
   <UIInnerModal :class="isInnerModal ? 'transform-open' : 'transform-close'" :isInnerModal="isInnerModal"
     @closeInnerModal="closeInnerModal" v-if="isInner" />
 </template>

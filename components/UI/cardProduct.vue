@@ -12,7 +12,6 @@ const props = defineProps<{
 <template>
   <div class="card-product" :class="{ 'card-category': caterory }">
     <div class="img center">
-      <UIPreloader v-if="0" />
       <NuxtImg :src="`/images/products/${image}`" />
     </div>
     <span class="price" v-if="price"> {{ price }} <span> ₽ </span></span>

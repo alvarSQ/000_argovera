@@ -19,8 +19,23 @@ export const useAllStore = defineStore('all', () => {
 
   const productsCountSerch = ref(0);
   const productsCountFav = ref(0);
+  const productsCountCart = ref(0);
 
   const activeCategoryChain = ref([] as number[]);
+
+  const isModal = ref(false);
+
+  const openModal = () => {
+    document.body.classList.add('modal-open');
+    isModal.value = true;
+    // Открытие модального окна авторизации
+  };
+
+  const closeModal = () => {
+    document.body.classList.remove('modal-open');
+    isModal.value = false;
+    // Закрытие модального окна авторизации
+  };
 
   // Получение цепочки категорий от корня до текущей
   const getCategoryChain = (categoryId: number): number[] => {
@@ -61,17 +76,21 @@ export const useAllStore = defineStore('all', () => {
       ? (activeCategoryChain.value = getCategoryChain(idCategoryByProduct))
       : null;
     breadCrumbs.value.id.push(...activeCategoryChain.value);
-    breadCrumbs.value.name = nameProduct;    
+    breadCrumbs.value.name = nameProduct;
   };
 
   return {
+    isModal,
     breadCrumbs,
     isLoading,
     searchQuery,
     limitScroll,
     productsCountSerch,
     productsCountFav,
+    productsCountCart,
     activeCategoryChain,
+    openModal,
+    closeModal,
     getBreadCrumbs,
     activeElement,
     getCategoryChain,
