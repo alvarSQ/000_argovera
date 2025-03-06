@@ -12,7 +12,7 @@ interface IToCart {
 const cartStore = useCartStore();
 const { cart } = storeToRefs(cartStore);
 const { token } = storeToRefs(useAuthStore());
-const { breadCrumbs } = storeToRefs(useAllStore());
+const { breadCrumbs, activeCategoryChain } = storeToRefs(useAllStore());
 
 definePageMeta({
     middleware: 'auth',
@@ -47,6 +47,7 @@ onMounted(() => {
         id: [],
         name: '',
     }
+    activeCategoryChain.value = []
 });
 </script>
 

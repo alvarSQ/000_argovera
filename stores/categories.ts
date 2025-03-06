@@ -10,9 +10,6 @@ export const useСategoriesStore = defineStore('categories', () => {
 
   const productsByCategory = ref({} as IProductsByCategory);
 
-  // const getCategories = computed(() => categories.value);
-  // const getProductsByCategory = computed(() => productsByCategory.value);
-
   const loadCategories = async (tree: string, slug: string) => {
     const { isLoading } = storeToRefs(useAllStore());
     isLoading.value = true;

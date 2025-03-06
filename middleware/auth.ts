@@ -1,12 +1,7 @@
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
+  const { token } = storeToRefs(useAuthStore());
 
-    const { token } = storeToRefs(useAuthStore());
-
-    if (token.value && to?.name === '/') {
-      return navigateTo('/');
-    }
-    
-    if (!token.value && to?.name !== '/') {
-      return navigateTo('/');
-    }
+  if (!token.value) {
+    return navigateTo('/');
+  }
 });

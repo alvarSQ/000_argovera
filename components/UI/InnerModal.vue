@@ -3,6 +3,10 @@ import { useСategoriesStore } from '@/stores/categories';
 const сategoriesStore = useСategoriesStore();
 
 const { categoriesTree } = storeToRefs(useСategoriesStore());
+const { token } = storeToRefs(useAuthStore());
+import { useAllStore } from '@/stores/all';
+
+const allStore = useAllStore();
 
 const modal = ref<HTMLDivElement | null>(null);
 
@@ -19,6 +23,10 @@ const handleClickOutside = (event: MouseEvent) => {
     emit('closeInnerModal');
   }
 };
+
+const isAuth = () => {
+  token.value ? navigateTo({ name: 'user' }) : allStore.openModal()
+}
 
 watch(
   () => props.isInnerModal,
@@ -48,12 +56,26 @@ onUnmounted(() => {
       <UICategoriesTree v-for="category in categoriesTree" :key="category.slug" :category="category" />
     </ul>
     <UIMenuBottom :inviz="false" />
+    <span class="line" @click="navigateTo({ name: 'products-favorited' })">
+      Избранное
+    </span>
+    <span @click="navigateTo({ name: 'cart' })">
+      Корзина
+    </span>
+    <span @click="isAuth()">
+      Личный кабинет
+    </span>
   </div>
 </template>
 
 <style scoped lang="scss">
 @use '@/assets/scss/utils/vars.scss' as *;
 @use "sass:color";
+
+.line {
+  padding-top: 10px;
+  border-top: 1px solid gray;
+}
 
 .title {
   font-size: 20px;
@@ -111,5 +133,12 @@ onUnmounted(() => {
   /* Для Firefox */
   scrollbar-width: thin;
   scrollbar-color: $primary-color rgba(0, 0, 0, 0.01);
+
+  span {
+    font-family: $mainFont;
+    font-size: 18px;
+    line-height: 0.5;
+    cursor: pointer;
+  }
 }
 </style>

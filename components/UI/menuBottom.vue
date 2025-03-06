@@ -39,12 +39,6 @@ const isFavorited = () => {
         <li>
             <NuxtLink to="/">О КОМПАНИИ АРГО</NuxtLink>
         </li>
-        <li class="line" v-if="!inviz" @click="isFavorited">
-            Избранное
-        </li>
-        <li v-if="!inviz">
-            <NuxtLink to="/">Личный кабинет</NuxtLink>
-        </li>
     </ul>
 </template>
 
@@ -58,6 +52,13 @@ const isFavorited = () => {
     margin-top: 20px;
     white-space: nowrap;
     cursor: pointer;
+
+    li {
+        &:hover {
+            color: $primary-color;
+        }
+    }
+
 }
 
 .inner {
@@ -65,11 +66,11 @@ const isFavorited = () => {
     flex-direction: column;
     gap: 10px;
     font-size: 16px;
-}
 
-.line {
-    margin-top: 5px;
-    padding-top: 5px;
-    border-top: 1px solid gray;
+    li {
+        &:hover {
+            color: $primary-color;
+        }
+    }
 }
 </style>

@@ -5,12 +5,17 @@ const allStore = useAllStore();
 
 const productsStore = useProductsStore();
 const { products } = storeToRefs(useProductsStore());
+const { activeCategoryChain } = storeToRefs(useAllStore());
 
 definePageMeta({
   layout: 'main'
 })
 
 await callOnce(() => productsStore.loadProduct())
+
+onMounted(() => {
+  activeCategoryChain.value = []
+});
 </script>
 
 <template>

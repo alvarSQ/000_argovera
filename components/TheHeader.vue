@@ -42,7 +42,7 @@ await callOnce('cart', () => cartStore.getCartToUser())
       <div class="container">
         <div class="navbar-content menu-top dn" v-show="!isHeader">
           <span>Пермь, ул. Луначарского, 90</span>
-          <div class="register" v-if="user.username" @click="authStore.logUserOut">{{ user.username }}</div>
+          <div class="register" v-if="user.username" @click="navigateTo({ name: 'user' })">{{ user.username }}</div>
           <div class="register" @click="allStore.openModal" v-else>Вход | Регистрация</div>
         </div>
         <div class="navbar-content">
